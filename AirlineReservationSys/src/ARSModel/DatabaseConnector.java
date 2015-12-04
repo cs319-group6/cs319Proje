@@ -141,6 +141,23 @@ public class DatabaseConnector {
 		}
 
 	}
+	//TODO
+	public boolean addUser(){
+		return true;
+	}
+	
+	//TODO
+	public boolean updateUser(){
+		return true;
+	}
+	
+	//TODO
+	public boolean addFlight(){
+		return true;
+	}
+	
+	//TODO getFlight()
+	
 
 	
 }
