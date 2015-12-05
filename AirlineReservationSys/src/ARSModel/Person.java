@@ -2,7 +2,7 @@ package ARSModel;
 
 public abstract class Person {
 	
-	long personID;
+	int personID;
 	String name;
 	String surname;
 	String email;
@@ -19,7 +19,7 @@ public abstract class Person {
 		phoneNo = "";
 	}
 	
-	public Person(long personID, String name, String surname, String email, String socialSecurityNo,
+	public Person(int personID, String name, String surname, String email, String socialSecurityNo,
 					String phoneNo)
 	{
 		this.personID = personID;
@@ -32,7 +32,7 @@ public abstract class Person {
 	
 	
 	//GET METHODS
-	public long getPersonID()
+	public int getPersonID()
 	{
 		return personID;
 	}
@@ -64,7 +64,7 @@ public abstract class Person {
 	
 	
 	//SET METHODS
-	public void setPersonID(long ID)
+	public void setPersonID(int ID)
 	{
 		personID = ID;
 	}
