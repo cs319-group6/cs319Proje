@@ -40,9 +40,10 @@ public class DatabaseConnector {
 	public boolean connect(){
 		 try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			Connection conn = DriverManager.getConnection(db_connect_string, db_userid, db_password);
+			 this.conn = DriverManager.getConnection(db_connect_string, db_userid, db_password);
 			statement = conn.createStatement();
-			System.out.println("Connected");
+			if(conn != null)
+				System.out.println("Connected");
 			return true;
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -56,7 +57,7 @@ public class DatabaseConnector {
 	}
 	private boolean checkConnection(){
 		try{
-			if(conn.isClosed()){
+			if(conn.isClosed() || conn == null){
 				return connect();		
 			}
 			else 
@@ -76,9 +77,8 @@ public class DatabaseConnector {
 	}
 	
 	public String encrypt(String str){
-		// Create key and cipher
-		String key = "Bar12345Bar12345"; // 128 bit key
-        // Create key and cipher
+		
+        // Create cipher
         Cipher cipher;
 		try {
 			cipher = Cipher.getInstance("AES");
@@ -107,12 +107,10 @@ public class DatabaseConnector {
 		
 		try {
 			cipher = Cipher.getInstance(ALGORITHM);
-			cipher.init(Cipher.ENCRYPT_MODE, aesKey);
 			byte[] bb = new byte[encStr.length()];
 	        for (int i=0; i<encStr.length(); i++) {
 	            bb[i] = (byte) encStr.charAt(i);
 	        }
-
 	        // decrypt the text
 	        cipher.init(Cipher.DECRYPT_MODE, aesKey);
 	        String decrypted = new String(cipher.doFinal(bb));
@@ -124,26 +122,74 @@ public class DatabaseConnector {
 		}
 	}
 	
-	public boolean verifyUser(int userID, String password){
-		sqlCommand = "Select * from user where idUser = "+ userID +" and password =  " + password;
+	public User verifyUser(int userID, String password){
+		
 		try{
-			rs = statement.executeQuery(sqlCommand);
+			preparedStatement = conn.prepareStatement("Select * from user where idUser = ? and password =  ?;");
+			preparedStatement.setInt(1, userID);
+			preparedStatement.setString(2, encrypt(password));
+			rs = preparedStatement.executeQuery();
 			if(rs.next()){
-				//TODO create user
+				boolean isAdmin = rs.getBoolean(6);
+				if(isAdmin){
+					return new Admin( rs.getInt(1), decrypt(rs.getString(2)), rs.getString(3), rs.getString(4), decrypt(rs.getString(5)), decrypt(rs.getString(6)), decrypt(rs.getString(7)) );
+				}else {
+					return new Clerk( rs.getInt(1), decrypt(rs.getString(2)), rs.getString(3), rs.getString(4), decrypt(rs.getString(5)), decrypt(rs.getString(6)), decrypt(rs.getString(7)) );
+				}
 				
-				return true;
 			}else{
-				return false;
+				return null;
 			}
 			
 		}catch(SQLException e){
-			return false;
+			//TODO error message
+			return null;
 		}
 
 	}
-	//TODO
-	public boolean addUser(){
-		return true;
+	
+	public User addUser(String name, String surname, String email, String soNo, String phone,  boolean type){
+		
+		try{
+			checkConnection();
+			conn = getConnection();
+			preparedStatement = conn.prepareStatement("insert into User (userName, userSurname, userEmail, socialsecurityno, phone, type ) values (?,?,?,?,?,?);");
+			preparedStatement.setString(1, name);
+			preparedStatement.setString(2, surname);
+			preparedStatement.setString(3, encrypt(email));
+			preparedStatement.setString(4, encrypt(soNo));
+			preparedStatement.setString(5, encrypt(phone));
+			preparedStatement.setBoolean(6, type);
+			
+			
+			if(preparedStatement.executeUpdate() == 1){
+				preparedStatement = conn.prepareStatement("Select * from User where userEmail = ?;");
+				preparedStatement.setString(1, encrypt(email));
+				rs = preparedStatement.executeQuery();
+				
+				if(rs.next()){
+					int id = rs.getInt(1);
+					preparedStatement = conn.prepareStatement("Update User set password = ? where idUser  = ?;");
+					preparedStatement.setString(1, encrypt(String.valueOf(id)));
+					preparedStatement.setInt(2, id);
+					preparedStatement.executeUpdate();
+					boolean isAdmin = rs.getBoolean(8);
+					if(isAdmin){
+						return new Admin( rs.getInt(1),encrypt(String.valueOf(id)), rs.getString(3), rs.getString(4), decrypt(rs.getString(5)), decrypt(rs.getString(6)), decrypt(rs.getString(7)) );
+					}else {
+						return new Clerk( rs.getInt(1), encrypt(String.valueOf(id)), rs.getString(3), rs.getString(4), decrypt(rs.getString(5)), decrypt(rs.getString(6)), decrypt(rs.getString(7)) );
+					}
+				}else
+					return null;
+			}
+			else
+				return null;
+		}catch(SQLException e){
+			//TODO Error message
+			e.printStackTrace();
+			return null;
+		}
+				
 	}
 	
 	//TODO

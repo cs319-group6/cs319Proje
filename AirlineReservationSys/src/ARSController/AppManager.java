@@ -13,6 +13,8 @@ public class AppManager {
 		System.out.println("Encrypted string = " + encrypt);
 		System.out.println("Decrypted string = " + db.decrypt(encrypt));
 		
+		db.addUser("sanem", "elbasi", "sanem.elbasi35@gmail.com", "33222188484", "04749987474", true);
+		
 		frame.setPanel(aMP);
 		
 		
