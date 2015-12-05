@@ -10,7 +10,6 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 
-
 public class DatabaseConnector {
 	private  final String ALGORITHM = "AES";
     private  final String KEY = "1Hbfh667adfDEJ78";
@@ -22,8 +21,8 @@ public class DatabaseConnector {
 	protected  String sqlCommand;
 	protected  Statement statement;
 	protected  ResultSet rs;
-	protected  PreparedStatement preparedStatement;
-	
+	protected  PreparedStatement preStt;
+
 	private static DatabaseConnector dbInstance = null;
 	
 	private DatabaseConnector(){
@@ -106,7 +105,7 @@ public class DatabaseConnector {
 		Cipher cipher;
 		
 		try {
-			cipher = Cipher.getInstance(ALGORITHM);
+			cipher = Cipher.getInstance("AES");
 			byte[] bb = new byte[encStr.length()];
 	        for (int i=0; i<encStr.length(); i++) {
 	            bb[i] = (byte) encStr.charAt(i);
@@ -125,10 +124,10 @@ public class DatabaseConnector {
 	public User verifyUser(int userID, String password){
 		
 		try{
-			preparedStatement = conn.prepareStatement("Select * from user where idUser = ? and password =  ?;");
-			preparedStatement.setInt(1, userID);
-			preparedStatement.setString(2, encrypt(password));
-			rs = preparedStatement.executeQuery();
+			preStt = conn.prepareStatement("Select * from user where idUser = ? and password =  ?;");
+			preStt.setInt(1, userID);
+			preStt.setString(2, encrypt(password));
+			rs = preStt.executeQuery();
 			if(rs.next()){
 				boolean isAdmin = rs.getBoolean(6);
 				if(isAdmin){
@@ -153,31 +152,38 @@ public class DatabaseConnector {
 		try{
 			checkConnection();
 			conn = getConnection();
-			preparedStatement = conn.prepareStatement("insert into User (userName, userSurname, userEmail, socialsecurityno, phone, type ) values (?,?,?,?,?,?);");
-			preparedStatement.setString(1, name);
-			preparedStatement.setString(2, surname);
-			preparedStatement.setString(3, encrypt(email));
-			preparedStatement.setString(4, encrypt(soNo));
-			preparedStatement.setString(5, encrypt(phone));
-			preparedStatement.setBoolean(6, type);
+			preStt = conn.prepareStatement("insert into User (userName, userSurname, userEmail, socialsecurityno, phone, type ) values (?,?,?,?,?,?);");
+			preStt.setString(1, name);
+			preStt.setString(2, surname);
+			//preStt.setString(3, encrypt(email));
+			preStt.setString(3, email);
+			//preStt.setString(4, encrypt(soNo));
+			preStt.setString(4, soNo);
+			//preStt.setString(5, encrypt(phone));
+			preStt.setString(5, phone);
+			preStt.setBoolean(6, type);
 			
 			
-			if(preparedStatement.executeUpdate() == 1){
-				preparedStatement = conn.prepareStatement("Select * from User where userEmail = ?;");
-				preparedStatement.setString(1, encrypt(email));
-				rs = preparedStatement.executeQuery();
+			if(preStt.executeUpdate() == 1){
+				preStt = conn.prepareStatement("Select * from User where userEmail = ?;");
+				//preStt.setString(1, encrypt(email));
+				preStt.setString(1, email);
+				rs = preStt.executeQuery();
 				
 				if(rs.next()){
 					int id = rs.getInt(1);
-					preparedStatement = conn.prepareStatement("Update User set password = ? where idUser  = ?;");
-					preparedStatement.setString(1, encrypt(String.valueOf(id)));
-					preparedStatement.setInt(2, id);
-					preparedStatement.executeUpdate();
+					preStt = conn.prepareStatement("Update User set password = ? where idUser  = ?;");
+					//preStt.setString(1, encrypt(String.valueOf(id)));
+					preStt.setString(1, String.valueOf(id));
+					preStt.setInt(2, id);
+					preStt.executeUpdate();
 					boolean isAdmin = rs.getBoolean(8);
 					if(isAdmin){
-						return new Admin( rs.getInt(1),encrypt(String.valueOf(id)), rs.getString(3), rs.getString(4), decrypt(rs.getString(5)), decrypt(rs.getString(6)), decrypt(rs.getString(7)) );
+						return new Admin( rs.getInt(1),String.valueOf(id), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7) );
+						//return new Admin( rs.getInt(1),encrypt(String.valueOf(id)), rs.getString(3), rs.getString(4), decrypt(rs.getString(5)), decrypt(rs.getString(6)), decrypt(rs.getString(7)) );
 					}else {
-						return new Clerk( rs.getInt(1), encrypt(String.valueOf(id)), rs.getString(3), rs.getString(4), decrypt(rs.getString(5)), decrypt(rs.getString(6)), decrypt(rs.getString(7)) );
+						//return new Clerk( rs.getInt(1), encrypt(String.valueOf(id)), rs.getString(3), rs.getString(4), decrypt(rs.getString(5)), decrypt(rs.getString(6)), decrypt(rs.getString(7)) );
+						return new Clerk( rs.getInt(1), String.valueOf(id), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7) );
 					}
 				}else
 					return null;
@@ -193,7 +199,24 @@ public class DatabaseConnector {
 	}
 	
 	//TODO
-	public boolean updateUser(){
+	public boolean updateUser(User user){
+		
+		try {
+			preStt = conn.prepareStatement("Update User set userName = ?, userSurname = ?, password = ?, userEmail= ?, socialsecurityno = ?, phone = ? where idUser  = ?;");
+			preStt.setString(1, user.getName());
+			preStt.setString(2, user.getSurname());
+			preStt.setString(3, user.getPassword());
+			preStt.setString(4, user.getEmail());
+			preStt.setString(5, user.getSocialSecurityNo());
+			preStt.setString(6, user.getPhoneNo());
+			preStt.setInt(7, user.getPersonID());
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return true;
 	}
 	
