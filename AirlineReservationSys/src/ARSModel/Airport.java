@@ -2,7 +2,7 @@ package ARSModel;
 
 public class Airport {
 
-	long airportID;
+	int airportID;
 	String country;
 	String city;
 	String name;
@@ -15,7 +15,7 @@ public class Airport {
 		name = "";
 	}
 	
-	public Airport(long airportID, String country, String city, String name)
+	public Airport(int airportID, String name, String country, String city)
 	{
 		this.airportID = airportID;
 		this.country = country;
@@ -24,7 +24,7 @@ public class Airport {
 	}
 	
 	//GET METHODS
-	public long getAirportID()
+	public int getAirportID()
 	{
 		return airportID;
 	}
@@ -45,7 +45,7 @@ public class Airport {
 	}
 	
 	//SET METHODS
-	public void setAirportID(long ID)
+	public void setAirportID(int ID)
 	{
 		airportID = ID; 
 	}
