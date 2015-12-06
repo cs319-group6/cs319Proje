@@ -487,25 +487,24 @@ public class DatabaseConnector {
 	}
 	
 	//TODO *****************
-	public Flight addFlight(Airport from, Airport to, String planeType ,Date dateTime, int duration){
+	public Flight addFlight(Airport from, Airport to, String planeType, long dateTime, int duration){
 		try{
 			checkConnection();
-			preStt = conn.prepareStatement("insert into Flight (from, to, planeType, datetime, duration ) values (?,?,?,?,?);");
+			preStt = conn.prepareStatement("insert into Flight (departure, destination, planeType, dateTime, duration ) values (?,?,?,?,?);");
 			preStt.setInt(1, from.getAirportID());
 			preStt.setInt(2, to.getAirportID());
 			preStt.setString(3, planeType);
-			Object param = new java.sql.Timestamp(dateTime.getTime());    
-			preStt.setObject(4, param);
+			preStt.setLong(4, dateTime);
 			preStt.setInt(5, duration);
 			
 			if(preStt.executeUpdate() == 1){
-				preStt = conn.prepareStatement("Select * from Flight where from = ? and to = ? and datetime = ?;");
+				preStt = conn.prepareStatement("Select * from Flight where departure = ? and destination = ? and dateTime = ?;");
 				preStt.setInt(1, from.getAirportID());
 				preStt.setInt(2, to.getAirportID());
-				preStt.setObject(3, param);
+				preStt.setLong(3, dateTime);
 				rs = preStt.executeQuery();
 				if(rs.next()){
-					return new Flight( rs.getInt(1),planeType, from, to,  dateTime, duration );
+					return new Flight( rs.getInt(1),planeType, from, to,  new java.util.Date(dateTime), duration );
 					
 				}else
 					return null;
@@ -513,6 +512,7 @@ public class DatabaseConnector {
 			}
 			return null;
 		}catch(SQLException e){
+			e.printStackTrace();
 			return null;
 		}
 		
@@ -522,18 +522,17 @@ public class DatabaseConnector {
 	}
 	
 	//TODO getFlight()
-	public ArrayList<Flight> getFlight(Airport from, Airport to, Date date){
+	public ArrayList<Flight> getFlight(Airport from, Airport to, long date){
 		try {
 			checkConnection();
 			ArrayList<Flight> flights = new ArrayList<Flight>();
-			preStt = conn.prepareStatement("Select * from Flight where from = ? and to = ? and dateTime = ?;");
+			preStt = conn.prepareStatement("Select * from Flight where departure = ? and destination = ? and dateTime = ?;");
 			preStt.setInt(1, from.getAirportID());
-			preStt.setInt(2, to.airportID);
-			Object param = new java.sql.Timestamp(date.getTime());    
-			preStt.setObject(3, param);
+			preStt.setInt(2, to.airportID);    
+			preStt.setLong(3, date);
 			rs = preStt.executeQuery();
 			while(rs.next()){
-				 flights.add(new Flight(rs.getInt(1),rs.getString(2) ,from, to, date, rs.getInt(6)));
+				 flights.add(new Flight(rs.getInt(1),rs.getString(2) ,from, to, new java.util.Date(date), rs.getInt(6)));
 			}
 			return flights;
 		} catch (SQLException e) {
@@ -549,10 +548,10 @@ public class DatabaseConnector {
 			checkConnection();
 			ArrayList<Flight> flights = new ArrayList<Flight>();
 			preStt = conn.prepareStatement("Select * from Flight;");
-			rs = preStt.executeQuery();
+			ResultSet rs = preStt.executeQuery();
 			while(rs.next()){
 				
-				 flights.add(new Flight(rs.getInt(1),rs.getString(2) ,getAirport(rs.getInt(3)), getAirport(rs.getInt(4)), (Date)rs.getObject(5), rs.getInt(6)));
+				 flights.add(new Flight(rs.getInt(1),rs.getString(2) ,getAirport((int)rs.getInt(3)), getAirport((int)rs.getInt(4)), new java.util.Date(rs.getLong(5)), rs.getInt(6)));
 			}
 			return flights;
 		} catch (SQLException e) {
