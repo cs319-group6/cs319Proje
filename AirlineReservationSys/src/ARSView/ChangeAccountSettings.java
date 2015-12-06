@@ -1,4 +1,4 @@
-package View;
+package ARSView;
 
 import javax.swing.JPanel;
 import javax.swing.JButton;
