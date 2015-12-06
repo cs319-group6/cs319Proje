@@ -21,6 +21,9 @@ public abstract class User extends Person {
 	public void setPassword(String pass ){
 		password = pass;
 	}
-	
+	 public String toString(){
+		 return "ID: " + personID + " password: " + password + " name: " + name +" " + surname + " email: " + 
+				 email + "SocialNo: " + socialSecurityNo + " phone no: " + phoneNo ;
+	 }
 	
 }

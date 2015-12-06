@@ -151,9 +151,11 @@ public class DatabaseConnector {
 			if(rs.next()){
 				boolean isAdmin = rs.getBoolean(6);
 				if(isAdmin){
-					return new Admin( rs.getInt(1), decrypt(rs.getString(2)), rs.getString(3), rs.getString(4), decrypt(rs.getString(5)), decrypt(rs.getString(6)), decrypt(rs.getString(7)) );
+					//return new Admin( rs.getInt(1), decrypt(rs.getString(2)), rs.getString(3), rs.getString(4), decrypt(rs.getString(5)), decrypt(rs.getString(6)), decrypt(rs.getString(7)) );
+					return new Admin( rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7) );
 				}else {
-					return new Clerk( rs.getInt(1), decrypt(rs.getString(2)), rs.getString(3), rs.getString(4), decrypt(rs.getString(5)), decrypt(rs.getString(6)), decrypt(rs.getString(7)) );
+					//return new Clerk( rs.getInt(1), decrypt(rs.getString(2)), rs.getString(3), rs.getString(4), decrypt(rs.getString(5)), decrypt(rs.getString(6)), decrypt(rs.getString(7)) );
+					return new Clerk( rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7) );
 				}
 				
 			}else{
@@ -218,18 +220,18 @@ public class DatabaseConnector {
 				
 	}
 	
-	public boolean updateUser(User user){
+	public boolean updateUser(int userID, String name, String surname, String password, String email, String soNo, String phone,  boolean type ){
 		
 		try {
 			checkConnection();
 			preStt = conn.prepareStatement("Update User set userName = ?, userSurname = ?, password = ?, userEmail= ?, socialsecurityno = ?, phone = ? where idUser  = ?;");
-			preStt.setString(1, user.getName());
-			preStt.setString(2, user.getSurname());
-			preStt.setString(3, user.getPassword());
-			preStt.setString(4, user.getEmail());
-			preStt.setString(5, user.getSocialSecurityNo());
-			preStt.setString(6, user.getPhoneNo());
-			preStt.setInt(7, user.getPersonID());
+			preStt.setString(1, name);
+			preStt.setString(2, surname);
+			preStt.setString(3, password);
+			preStt.setString(4, email);
+			preStt.setString(5, soNo);
+			preStt.setString(6, phone);
+			preStt.setInt(7, userID);
 			
 			if(preStt.executeUpdate()== 1){
 				return true;
@@ -252,9 +254,11 @@ public class DatabaseConnector {
 			if(rs.next()){
 				boolean isAdmin = rs.getBoolean(6);
 				if(isAdmin){
-					return new Admin( rs.getInt(1), decrypt(rs.getString(2)), rs.getString(3), rs.getString(4), decrypt(rs.getString(5)), decrypt(rs.getString(6)), decrypt(rs.getString(7)) );
+					//return new Admin( rs.getInt(1), decrypt(rs.getString(2)), rs.getString(3), rs.getString(4), decrypt(rs.getString(5)), decrypt(rs.getString(6)), decrypt(rs.getString(7)) );
+					return new Admin( rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7));
 				}else {
-					return new Clerk( rs.getInt(1), decrypt(rs.getString(2)), rs.getString(3), rs.getString(4), decrypt(rs.getString(5)), decrypt(rs.getString(6)), decrypt(rs.getString(7)) );
+					//return new Clerk( rs.getInt(1), decrypt(rs.getString(2)), rs.getString(3), rs.getString(4), decrypt(rs.getString(5)), decrypt(rs.getString(6)), decrypt(rs.getString(7)) );
+					return new Clerk( rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7));
 				}
 			}
 			return null;
@@ -275,9 +279,10 @@ public class DatabaseConnector {
 			while (rs.next()){
 				boolean isAdmin = rs.getBoolean(6);
 				if(isAdmin){
-					users.add(new Admin( rs.getInt(1), decrypt(rs.getString(2)), rs.getString(3), rs.getString(4), decrypt(rs.getString(5)), decrypt(rs.getString(6)), decrypt(rs.getString(7)) ));
+					//users.add(new Admin( rs.getInt(1), decrypt(rs.getString(2)), rs.getString(3), rs.getString(4), decrypt(rs.getString(5)), decrypt(rs.getString(6)), decrypt(rs.getString(7)) ));
+					users.add(new Admin( rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7) ));
 				}else {
-					users.add( new Clerk( rs.getInt(1), decrypt(rs.getString(2)), rs.getString(3), rs.getString(4), decrypt(rs.getString(5)), decrypt(rs.getString(6)), decrypt(rs.getString(7)) ));
+					users.add(new Clerk( rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7) ));
 				}
 				
 			}
@@ -299,9 +304,9 @@ public class DatabaseConnector {
 			rs = preStt.executeQuery();
 			while (rs.next()){
 				if(isAdmin){
-					users.add(new Admin( rs.getInt(1), decrypt(rs.getString(2)), rs.getString(3), rs.getString(4), decrypt(rs.getString(5)), decrypt(rs.getString(6)), decrypt(rs.getString(7)) ));
+					users.add(new Admin( rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7) ));
 				}else {
-					users.add( new Clerk( rs.getInt(1), decrypt(rs.getString(2)), rs.getString(3), rs.getString(4), decrypt(rs.getString(5)), decrypt(rs.getString(6)), decrypt(rs.getString(7)) ));
+					users.add(new Clerk( rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7) ));
 				}
 				
 			}
@@ -409,7 +414,6 @@ public class DatabaseConnector {
 			return null;
 		}
 	}
-	
 	
 	//TODO *****************
 	public Flight addFlight(Airport from, Airport to, String planeType ,Date dateTime, int duration){
