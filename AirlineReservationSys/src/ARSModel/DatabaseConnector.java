@@ -322,7 +322,7 @@ public class DatabaseConnector {
 	public Passenger addPassenger(String name, String surname, String email, String soNo, String phone){
 		try{
 			checkConnection();
-			preStt = conn.prepareStatement("insert into Passenger (passName, passSurname, passEmail, socialsecurityno, phone) values (?,?,?,?,?,?);");
+			preStt = conn.prepareStatement("insert into Passenger (PassName, PassSurname, PassEmail, socialsecurityno, phone) values (?,?,?,?,?);");
 			preStt.setString(1, name);
 			preStt.setString(2, surname);
 			preStt.setString(3, email);
@@ -331,7 +331,7 @@ public class DatabaseConnector {
 			
 			
 			if(preStt.executeUpdate() == 1){
-				preStt = conn.prepareStatement("Select * from User where userEmail = ?;");
+				preStt = conn.prepareStatement("Select * from Passenger where PassEmail = ?;");
 				//preStt.setString(1, encrypt(email));
 				preStt.setString(1, email);
 				rs = preStt.executeQuery();
@@ -353,7 +353,7 @@ public class DatabaseConnector {
 	public Passenger getPassenger(String email){
 		try {
 			checkConnection();
-			preStt = conn.prepareStatement("Select * from Flight where PassEmail = ?;");
+			preStt = conn.prepareStatement("Select * from Passenger where PassEmail = ?;");
 			preStt.setString(1, email);
 			rs = preStt.executeQuery();
 			if(rs.next()){
@@ -371,7 +371,7 @@ public class DatabaseConnector {
 		try {
 			checkConnection();
 			ArrayList<Passenger> passengers = new ArrayList<Passenger>();
-			preStt = conn.prepareStatement("Select * from Flight;");
+			preStt = conn.prepareStatement("Select * from Passenger;");
 			rs = preStt.executeQuery();
 			while(rs.next()){
 				passengers.add( new Passenger(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6)));

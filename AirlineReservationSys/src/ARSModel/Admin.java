@@ -11,4 +11,8 @@ public class Admin extends User {
 		super(personID, password, name, surname, email,socialSecurityNo,phoneNo);
 		
 	}
+	
+	public String toStrin(){
+		return "Admin".concat(super.toString());
+	}
 }

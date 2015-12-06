@@ -22,8 +22,7 @@ public abstract class User extends Person {
 		password = pass;
 	}
 	 public String toString(){
-		 return "ID: " + personID + " password: " + password + " name: " + name +" " + surname + " email: " + 
-				 email + "SocialNo: " + socialSecurityNo + " phone no: " + phoneNo ;
+		 return (super.toString()).concat(" password: " + password);
 	 }
 	
 }

@@ -94,8 +94,10 @@ public abstract class Person {
 		email = str;
 	}
 	
-	
-	//METHODS
+	public String toString(){
+		return "ID: " + personID + " name: " + name +" " + surname + " email: " + 
+				 email + " social no: " + socialSecurityNo + " phone no: " + phoneNo ; 
+	}
 	
 	
 

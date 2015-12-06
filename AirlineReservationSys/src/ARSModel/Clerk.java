@@ -12,4 +12,8 @@ public class Clerk extends User {
 		super(personID,password, name, surname, email,socialSecurityNo,phoneNo);
 		
 	}
+	
+	public String toStrin(){
+		return "Clerk".concat(super.toString());
+	}
 }
