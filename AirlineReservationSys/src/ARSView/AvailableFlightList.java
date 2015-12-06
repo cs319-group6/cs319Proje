@@ -1,4 +1,4 @@
-package fummy;
+package ARSView;
 
 import javax.swing.JPanel;
 import javax.swing.JTable;

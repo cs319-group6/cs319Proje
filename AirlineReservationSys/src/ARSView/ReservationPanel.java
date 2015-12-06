@@ -1,4 +1,7 @@
-package fummy;
+package ARSView;
+
+
+import ARSController.AppManager;
 
 import javax.swing.JPanel;
 import javax.swing.JList;
@@ -7,9 +10,9 @@ import java.awt.Color;
 import java.awt.Image;
 
 import javax.swing.JLabel;
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.DateModel;
 
+
+import java.time.Month;
 import java.util.Locale;
 import java.util.Properties;
 import javax.swing.JInternalFrame;
@@ -28,10 +31,17 @@ import javax.swing.JComboBox;
 import javax.swing.JToggleButton;
 import javax.swing.border.Border;
 
-import org.jdatepicker.util.JDatePickerUtil;
 
 public class ReservationPanel extends JPanel {
+    AppManager manager;
+    public final String[] Day = {"1", "2", "3","4","5","6","7","8","9","10",
+            "11","12","13","14","15","16","17","18","19","20",
+            "21","22","23","24","25","26","27","28","29","30","31" };
+    public final String[] Month = {"1","2","3","4","5","6","7","8","9","10","11","12"};
 
+    {
+
+    }
 	/**
 	 * Create the panel.
 	 */
@@ -58,13 +68,13 @@ public class ReservationPanel extends JPanel {
 
 		add(comboBox_1);
 		
-		JComboBox comboBox_2 = new JComboBox();
+		JComboBox comboBox_2 = new JComboBox(Day);
 		comboBox_2.setBackground(Color.white);
 		comboBox_2.setToolTipText("Day\r\n");
 		comboBox_2.setBounds(67, 122, 46, 20);
 		add(comboBox_2);
 		
-		JComboBox comboBox_3 = new JComboBox();
+		JComboBox comboBox_3 = new JComboBox(Month);
 		comboBox_3.setBackground(Color.white);
 		comboBox_3.setToolTipText("Month");
 		comboBox_3.setBounds(126, 122, 48, 20);
@@ -79,11 +89,12 @@ public class ReservationPanel extends JPanel {
 		btnBack.setContentAreaFilled(false);
 		btnBack.setBounds(31, 236, 64, 40);
 		try {
-			    Image img1 = ImageIO.read(getClass().getResource("Ic_arrow_back_36px.png"));
+			    Image img1 = ImageIO.read(getClass().getResource("src/images/Ic_arrow_back_36px.png"));
 			    btnBack.setIcon(new ImageIcon(img1));
 			  } catch (IOException ex) {
 		  }
 		add(btnBack);
+
 	
 		JButton btnNewButton = new JButton("List Flights");
 		btnNewButton.setBackground(Color.black);

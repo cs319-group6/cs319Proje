@@ -7,4 +7,5 @@ import javax.swing.*;
  */
 public abstract class PanelObserver {
     public abstract void update();
+    public abstract void notifyMain();
 }
