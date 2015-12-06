@@ -562,8 +562,53 @@ public class DatabaseConnector {
 		
 	}
 	
+	public Reservation addReservation(Flight flight, Passenger pass, Clerk clerk, Seat seat){
+		try{
+			checkConnection();
+			preStt = conn.prepareStatement("insert into Reservation (flight, passenger, clerk, seatNo, seatChar ) values (?,?,?,?,?);");
+			preStt.setInt(1, flight.getFlightID());
+			preStt.setInt(2, pass.getPersonID());
+			preStt.setInt(3, clerk.getPersonID());
+			preStt.setInt(4, seat.getSeatNo());
+			preStt.setString(5, seat.getSeatChar());
+			
+			if(preStt.executeUpdate() == 1){
+				preStt = conn.prepareStatement("Select * from Reservation where seatNo = ? and seatChar = ? and flight = ?;");
+				preStt.setInt(1, seat.getSeatNo());
+				preStt.setString(2, seat.getSeatChar());
+				preStt.setInt(3, flight.getFlightID());
+				rs = preStt.executeQuery();
+				if(rs.next()){
+					return new Reservation( rs.getInt(1),flight, pass,  seat, clerk );
+					
+				}else
+					return null;
+				
+			}
+			return null;
+		}catch(SQLException e){
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
 	
-	
-	
+	public boolean deleteReservation(int resID){
+		try{
+			checkConnection();
+			preStt = conn.prepareStatement("delete from Reservation where idReservation = ?;");
+			preStt.setInt(1, resID);
+		
+			if(preStt.executeUpdate() == 1){
+				return true;
+		
+			}
+			return false;
+		}catch(SQLException e){
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
 	
 }
