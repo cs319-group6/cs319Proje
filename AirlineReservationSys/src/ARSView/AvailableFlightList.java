@@ -1,50 +1,32 @@
-package fummy;
-
+package View;
 import javax.swing.JPanel;
-import javax.swing.JTable;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Image;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import java.awt.BorderLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class AvailableFlightList extends JPanel {
-	private JTable table;
-
-	/**
-	 * Create the panel.
-	 */
 	public AvailableFlightList() {
-		setBackground(Color.white);
-
+		setLayout(new BorderLayout(0, 0));
 		
-		String columnNames[]= {"Departure","Arrival","Duration","FlightId","Cost"};
-		setLayout(null);
+		JPanel panel = new JPanel();
+		add(panel);
+		panel.setLayout(null);
 		
-		table = new JTable();
-		table.setBounds(10, 141, 430, -125);
-		add(table);
+		JButton btnNewButton = new JButton("> Next");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		btnNewButton.setBounds(182, 165, 89, 23);
+		panel.add(btnNewButton);
 		
-		JButton btnNext = new JButton("Proceed");
-		btnNext.setBounds(197, 144, 89, 23);
-		btnNext.setBackground(Color.black);
-		btnNext.setContentAreaFilled(false);
-		add(btnNext);
-		
-		JButton btnBack = new JButton("Back");
-		btnBack.setBounds(31, 236, 64, 40);
-		try {
-		    Image img1 = ImageIO.read(getClass().getResource("Ic_arrow_back_36px.png"));
-		    btnBack.setIcon(new ImageIcon(img1));
-		} catch (IOException ex) {
-		}
-		btnBack.setBackground(Color.black);
-		btnBack.setContentAreaFilled(false);
-		add(btnBack);
-
+		JButton btnNewButton_1 = new JButton("<- Back");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnNewButton_1.setBounds(20, 254, 89, 23);
+		panel.add(btnNewButton_1);
 	}
-
 }
