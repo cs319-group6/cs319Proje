@@ -73,6 +73,7 @@ public class DatabaseConnector {
 			return false;
 		}
 	}
+
 	private boolean checkConnection(){
 		try{
 			if(conn.isClosed() || conn == null){
@@ -366,6 +367,24 @@ public class DatabaseConnector {
 		}
 	}
 	
+	public ArrayList<Passenger> getAllPassengers(){
+		try {
+			checkConnection();
+			ArrayList<Passenger> passengers = new ArrayList<Passenger>();
+			preStt = conn.prepareStatement("Select * from Flight;");
+			rs = preStt.executeQuery();
+			while(rs.next()){
+				passengers.add( new Passenger(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6)));
+			}
+			return passengers;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	
 	public Airport addAirport(String country, String city, String airportName){
 		try{
 			checkConnection();
@@ -466,7 +485,6 @@ public class DatabaseConnector {
 			return null;
 		}
 	}
-
 	
 	//TODO *****************
 	public Flight addFlight(Airport from, Airport to, String planeType ,Date dateTime, int duration){
@@ -544,6 +562,9 @@ public class DatabaseConnector {
 		}
 		
 	}
+	
+	
+	
 	
 	
 }
