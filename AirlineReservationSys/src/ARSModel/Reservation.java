@@ -2,34 +2,34 @@ package ARSModel;
 
 public class Reservation {
 
-	Passenger[] passengers;
-	Seat[] seats;
+	Passenger passenger;
+	Seat seat;
 	Clerk clerk;
 	
 	public Reservation()
 	{
-		passengers = new Passenger[0];
-		seats = new Seat[0];
+		passenger = null;
+		seat = null;
 		clerk = new Clerk();
 	}
 	
-	public Reservation(Passenger[] passengers, Seat[] seats, Clerk clerk)
+	public Reservation(Passenger passenger, Seat seat, Clerk clerk)
 	{
-		this.passengers = passengers;
-		this.seats = seats;
+		this.passenger = passenger;
+		this.seat = seat;
 		this.clerk = clerk;
 	}
 	
 	
 	//GET METHODS
-	public Passenger[] getPassengers()
+	public Passenger getPassengers()
 	{
-		return passengers;
+		return passenger;
 	}
 	
-	public Seat[] getSeats()
+	public Seat getSeats()
 	{
-		return seats;
+		return seat;
 	}
 	
 	public Clerk getClerk()
@@ -39,14 +39,14 @@ public class Reservation {
 	
 	
 	//SET METHODS
-	public void setPassengers(Passenger[] a)
+	public void setPassengers(Passenger a)
 	{
-		passengers = a;
+		passenger = a;
 	}
 	
-	public void setSeats(Seat[] a)
+	public void setSeats(Seat a)
 	{
-		seats = a;
+		seat = a;
 	}
 	
 	public void setClerk(Clerk a)
