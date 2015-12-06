@@ -15,7 +15,7 @@ public class Airport {
 		name = "";
 	}
 	
-	public Airport(int airportID, String country, String city, String name)
+	public Airport(int airportID, String name, String country, String city)
 	{
 		this.airportID = airportID;
 		this.country = country;
@@ -65,5 +65,8 @@ public class Airport {
 		name = str;
 	}
 	
+	public String toString(){
+		return "Airport id: " +airportID+ " name: " +name+ " country: " +country+ " city: " + city;
+	}
 	
 }

@@ -396,7 +396,7 @@ public class DatabaseConnector {
 		
 	}
 
-	public ArrayList<Airport> getAirport(String country, String city){
+	public ArrayList<Airport> getAirports(String country, String city){
 		try {
 			checkConnection();
 			ArrayList<Airport> airports = new ArrayList<Airport>();
@@ -414,6 +414,59 @@ public class DatabaseConnector {
 			return null;
 		}
 	}
+	
+	public ArrayList<Airport> getAllAirports(){
+		try {
+			checkConnection();
+			ArrayList<Airport> airports = new ArrayList<Airport>();
+			preStt = conn.prepareStatement("Select * from Airport ;");
+			rs = preStt.executeQuery();
+			while(rs.next()){
+				 airports.add(new Airport(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4)));
+			}
+			return airports;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public Airport getAirport(String name){
+		try {
+			checkConnection();
+			ArrayList<Airport> airports = new ArrayList<Airport>();
+			preStt = conn.prepareStatement("Select * from Airport where AirportName = ?;");
+			preStt.setString(1, name);
+			rs = preStt.executeQuery();
+			if(rs.next()){
+				 return new Airport(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4));
+			}
+			return null;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public Airport getAirport(int id){
+		try {
+			checkConnection();
+			preStt = conn.prepareStatement("Select * from Airport where idAirport = ?;");
+			preStt.setInt(1, id);
+			rs = preStt.executeQuery();
+			if(rs.next()){
+				 return new Airport(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4));
+			}
+			return null;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	
 	//TODO *****************
 	public Flight addFlight(Airport from, Airport to, String planeType ,Date dateTime, int duration){
@@ -462,7 +515,7 @@ public class DatabaseConnector {
 			preStt.setObject(3, param);
 			rs = preStt.executeQuery();
 			while(rs.next()){
-				 flights.add(new Flight(rs.getInt(1),rs.getString(2) ,from, to, date, rs.getInt(5)));
+				 flights.add(new Flight(rs.getInt(1),rs.getString(2) ,from, to, date, rs.getInt(6)));
 			}
 			return flights;
 		} catch (SQLException e) {
@@ -473,6 +526,24 @@ public class DatabaseConnector {
 		
 	}
 
+	public ArrayList<Flight> getAllFlights(){
+		try {
+			checkConnection();
+			ArrayList<Flight> flights = new ArrayList<Flight>();
+			preStt = conn.prepareStatement("Select * from Flight;");
+			rs = preStt.executeQuery();
+			while(rs.next()){
+				
+				 flights.add(new Flight(rs.getInt(1),rs.getString(2) ,getAirport(rs.getInt(3)), getAirport(rs.getInt(4)), (Date)rs.getObject(5), rs.getInt(6)));
+			}
+			return flights;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
 	
 	
 }

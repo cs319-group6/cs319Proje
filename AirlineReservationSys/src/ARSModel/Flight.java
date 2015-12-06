@@ -134,4 +134,8 @@ public class Flight {
 		return check;
 	}
 	
+	public String toString(){
+		return "Flight id: " +flightID+ " from: " +departure.getName()+ " to: " + destination.getName()+ " at: " +dateTime.toString()+ " duration: " + duration;
+	}
+	
 }
