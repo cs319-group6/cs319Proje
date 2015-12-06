@@ -1,14 +1,13 @@
 package ARSModel;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.Date;
 
 public class Flight {
 
-	long flightID;
+	int flightID;
 	String planeType;
 	Airport destination;
 	Airport departure;
-	Calendar dateTime;
+	Date dateTime;
 	String status;
 	int duration;
 	Seat[] seats;
@@ -19,28 +18,28 @@ public class Flight {
 		planeType = "";
 		destination = new Airport();
 		departure = new Airport();
-		dateTime = new GregorianCalendar();
+		dateTime = new Date();
 		status = "";
 		duration = -1;
 		seats = new Seat[0];
 	}
 	
-	public Flight(long flightID, String planeType, Airport destination, Airport departure,
-					Calendar dateTime, String status, int duration, Seat[] seats)
+	public Flight(int flightID, String planeType, Airport destination, Airport departure,
+					Date dateTime, int duration)
 	{
 		this.flightID = flightID;
 		this.planeType = planeType;
 		this.destination = destination;
 		this.departure = departure;
 		this.dateTime = dateTime;
-		this.status = status;
+		//this.status = status;
 		this.duration = duration;
-		this.seats = seats;
+		//TODO generate seats according to planeType
 	}
 	
 	
 	//GET METHODS
-	public long getFlightID()
+	public int getFlightID()
 	{
 		return flightID;
 	}
@@ -60,11 +59,11 @@ public class Flight {
 		return departure;
 	}
 	
-	public Calendar getDateTime()
+	public Date getDateTime()
 	{
 		return dateTime;
 	}
-	
+	//TODO calculate status according to current time and dateTime
 	public String getStatus()
 	{
 		return status;
@@ -82,7 +81,7 @@ public class Flight {
 	
 	
 	//SET METHODS
-	public void setFlightID(long ID)
+	public void setFlightID(int ID)
 	{
 		flightID = ID;
 	}
@@ -102,7 +101,7 @@ public class Flight {
 		departure = dep;
 	}
 	
-	public void setDateTime(Calendar c)
+	public void setDateTime(Date c)
 	{
 		dateTime = c;
 	}
