@@ -11,7 +11,6 @@ import java.awt.Image;
 
 import javax.swing.JLabel;
 
-
 import java.time.Month;
 import java.util.Locale;
 import java.util.Properties;

@@ -21,6 +21,8 @@ public abstract class User extends Person {
 	public void setPassword(String pass ){
 		password = pass;
 	}
-	
+	 public String toString(){
+		 return (super.toString()).concat(" password: " + password);
+	 }
 	
 }

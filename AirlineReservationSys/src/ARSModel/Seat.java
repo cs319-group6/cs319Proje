@@ -2,26 +2,34 @@ package ARSModel;
 
 public class Seat {
 
-	String seatNo;
+	int seatNo;
+	String seatChar;
 	boolean available;
 	
 	public Seat()
 	{
-		seatNo = "";
+		seatNo = -1;
+		seatChar = "";
 		available = false;
 	}
 	
-	public Seat(String seatNo, boolean available)
+	public Seat(int seatNo, String seatChar, boolean available)
 	{
 		this.seatNo = seatNo;
+		this.seatChar = seatChar;
 		this.available = available;
 	}
 	
 	
 	//GET METHODS
-	public String getSeatNo()
+	public int getSeatNo()
 	{
 		return seatNo;
+	}
+	
+	public String getSeatChar()
+	{
+		return seatChar;
 	}
 	
 	public boolean getAvailable()
@@ -31,7 +39,7 @@ public class Seat {
 	
 	
 	//SET METHODS
-	public void setSeatNo(String str)
+	public void setSeatNo(int str)
 	{
 		seatNo = str;
 	}
@@ -41,6 +49,10 @@ public class Seat {
 		available = a;
 	}
 	
+	public void setSeatChar( String c)
+	{
+		seatChar = c;
+	}
 	
 	//METHODS
 	public boolean allocate()
@@ -49,5 +61,8 @@ public class Seat {
 		return true;
 	}
 	
+	boolean equals(Seat s){
+		return(s.getSeatChar().equalsIgnoreCase(this.seatChar) && s.getSeatNo() == this.getSeatNo());
+	}
 }
 

@@ -1,5 +1,6 @@
 package ARSView;
 
+
 import ARSController.AppManager;
 import ARSModel.Flight;
 
@@ -17,6 +18,9 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import java.awt.BorderLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class AvailableFlightList extends JPanel {
 	AppManager manager;
@@ -29,16 +33,13 @@ public class AvailableFlightList extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public AvailableFlightList() {
-		setBackground(Color.white);
 
+	public AvailableFlightList() {
+		setLayout(new BorderLayout(0, 0));
 		
-		String columnNames[]= {"Departure","Arrival","Duration","FlightId","Cost"};
-		setLayout(null);
-		
-		table = new JTable();
-		table.setBounds(10, 141, 430, -125);
-		add(table);
+		JPanel panel = new JPanel();
+		add(panel);
+		panel.setLayout(null);
 		
 		JButton btnNext = new JButton("Proceed");
 		btnNext.setBounds(197, 144, 89, 23);
@@ -69,4 +70,5 @@ public class AvailableFlightList extends JPanel {
 
     public void setFlight(ArrayList<Flight> flights) {
     }
+
 }

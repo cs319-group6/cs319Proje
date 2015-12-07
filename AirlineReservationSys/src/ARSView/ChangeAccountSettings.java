@@ -19,7 +19,9 @@ import javax.swing.border.LineBorder;
 import java.awt.Color;
 
 public class ChangeAccountSettings extends JPanel {
+
 	AppManager manage;
+
 	private JTextField passwordField;
 	private JTextField newPassField;
 	private JTextField retypeField;
@@ -35,6 +37,7 @@ public class ChangeAccountSettings extends JPanel {
 		back.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				manage.update(manage.BACK);
+
 			}
 		});
 		back.setBounds(10, 266, 89, 23);

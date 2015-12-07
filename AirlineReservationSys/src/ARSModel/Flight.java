@@ -1,8 +1,13 @@
 package ARSModel;
+
+
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Flight {
-
+	int numOfRows = -1;
+	String seatingPlanChars = "";
+	int[] seatArrengement;
 	int flightID;
 	String planeType;
 	Airport destination;
@@ -10,7 +15,7 @@ public class Flight {
 	Date dateTime;
 	String status;
 	int duration;
-	Seat[] seats;
+	Seat[][] seats;
 	
 	public Flight()
 	{
@@ -21,7 +26,7 @@ public class Flight {
 		dateTime = new Date();
 		status = "";
 		duration = -1;
-		seats = new Seat[0];
+		seats = new Seat[0][0];
 	}
 	
 	public Flight(int flightID, String planeType, Airport destination, Airport departure,
@@ -34,6 +39,9 @@ public class Flight {
 		this.dateTime = dateTime;
 		//this.status = status;
 		this.duration = duration;
+
+		setSeatPlan();
+		generateDefaultSeats();
 		//TODO generate seats according to planeType
 	}
 	
@@ -74,7 +82,7 @@ public class Flight {
 		return duration;
 	}
 	
-	public Seat[] getSeats()
+	public Seat[][] getSeats()
 	{
 		return seats;
 	}
@@ -116,10 +124,24 @@ public class Flight {
 		duration = a;
 	}
 	
-	public void setSeats(Seat[] a)
+	public void setSeats(Seat[][] a)
 	{
 		seats = a;
 	}
+	
+	public void setSeatAvailablity(ArrayList<Seat> reserveds){
+		if(reserveds == null)
+			return;
+		int row;
+		int schar;
+		for(int i = 0 ;i < reserveds.size(); i++){
+			row =reserveds.get(i).getSeatNo();
+			schar = seatingPlanChars.indexOf(reserveds.get(i).getSeatChar());
+			seats[row][schar].setAvailable(false);
+			//System.out.println(row + String.valueOf(seatingPlanChars.charAt(schar)) + "is reserved");
+		}
+	}
+	
 	
 	//METHODS
 	public void updateFlight(String seatNo)
@@ -132,6 +154,30 @@ public class Flight {
 		boolean check = false;
 		
 		return check;
+	}
+
+	public void setSeatPlan(){
+		String[] planType_  = planeType.split(",");
+		planeType = planType_[0];
+		numOfRows = Integer.parseInt(planType_[1]);
+		seatingPlanChars = planType_[2];
+		seatArrengement = new int[planType_.length-3];
+		for(int i = 0; i< seatArrengement.length; i++){
+			seatArrengement[i]  =Integer.parseInt(planType_[i + 3]);
+		}
+		
+	}
+	
+	public void generateDefaultSeats(){
+		seats = new Seat[numOfRows][seatingPlanChars.length()];
+		//System.out.println( "Rows : " + numOfRows + " chars: " + seatingPlanChars);
+		for(int i = 0; i< numOfRows; i++){
+			
+			for(int j = 0; j < seatingPlanChars.length(); j++){
+				seats[i][j] = new Seat(i,seatingPlanChars.substring(j, j+1), true);
+			}
+			
+		}
 	}
 	
 	public String toString(){

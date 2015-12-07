@@ -11,6 +11,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.JTextField;
 
 public class DeleteReservation extends JPanel {
+
 	AppManager manager;
 	private JTextField textField;
 	private JTextField textField_1;
@@ -90,6 +91,7 @@ public class DeleteReservation extends JPanel {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				manager.update(manager.BACK);
+
 			}
 		});
 		button.setBounds(10, 244, 89, 23);

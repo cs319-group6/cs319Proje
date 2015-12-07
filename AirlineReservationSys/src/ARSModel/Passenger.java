@@ -10,4 +10,7 @@ public class Passenger extends Person {
 		super(personID, name, surname, email,socialSecurityNo,phoneNo);
 		
 	}
+	public String toStrin(){
+		return "Passenger ".concat(super.toString());
+	}
 }

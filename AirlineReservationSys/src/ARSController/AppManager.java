@@ -1,5 +1,7 @@
 package ARSController;
 
+import java.util.ArrayList;
+
 import ARSModel.*;
 import ARSView.*;
 
@@ -166,8 +168,6 @@ public class AppManager {
         setDisplayPanel(currentPanel);
 
 
-
-		
 
 		
 	}
