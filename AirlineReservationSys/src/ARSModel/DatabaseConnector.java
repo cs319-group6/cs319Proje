@@ -147,10 +147,10 @@ public class DatabaseConnector {
 			checkConnection();
 			preStt = conn.prepareStatement("Select * from User where idUser = ? and password =  ?;");
 			preStt.setInt(1, userID);
-			preStt.setString(2, encrypt(password));
+			preStt.setString(2, password);
 			rs = preStt.executeQuery();
 			if(rs.next()){
-				boolean isAdmin = rs.getBoolean(6);
+				boolean isAdmin = rs.getBoolean(8);
 				if(isAdmin){
 					//return new Admin( rs.getInt(1), decrypt(rs.getString(2)), rs.getString(3), rs.getString(4), decrypt(rs.getString(5)), decrypt(rs.getString(6)), decrypt(rs.getString(7)) );
 					return new Admin( rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7) );

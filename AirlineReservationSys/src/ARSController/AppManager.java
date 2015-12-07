@@ -29,6 +29,10 @@ public class AppManager {
     public static PanelFactory factory = new PanelFactory();
     public static User activeUser;
     public static ArrayList<Flight> flights = new  ArrayList<>();
+    public static Airport ResDeparture = null;
+    public static Airport ResDestination = null;
+    public static long ResDate = 0;
+    
 
     public static DatabaseConnector connector = DatabaseConnector.getInstance();
 
@@ -42,8 +46,8 @@ public class AppManager {
     }
 
     //Todo
-	public List<Flight> getFlight(Airport from, Airport to, long date){
-        connector.getFlight(from,to,date);
+	public static ArrayList<Flight> getFlight(Airport from, Airport to, long date){
+        return connector.getFlight(from,to,date);
 	}
 
     public static void setDisplayPanel(JPanel panel) {
@@ -63,6 +67,12 @@ public class AppManager {
 //    public boolean makeReservation(Seat seat, Passenger passenger){
 //
 //    }
+    
+    
+    public static ArrayList<Airport> getAllAirports(){
+    	return connector.getAllAirports();
+    }
+    
 
     /**The method that updates JFrame by observing panels
      *
@@ -76,9 +86,9 @@ public class AppManager {
                 if(action == PROCEEDTOMAIN){
                     int id = Integer.parseInt((String)args[0]);
                     String pass = String.valueOf((char[]) args[1]);
-                    //user = verifyUser(id,pass);
+                    user = verifyUser(id,pass);
                     //todo
-                    if(true){
+                    if(user != null){
                         panels = factory.getPanels(user);
                         activeUser = user;
                         setDisplayPanel(panels.get(1));
@@ -109,10 +119,14 @@ public class AppManager {
                 break;
             case 2:
                 if(action == LISTFLIGHT){
-                    flights = getFlight(args[0],args[1],args[2]);
-                    ((AvailableFlightList)panels.get(5)).setFlight(flights);
-                    setDisplayPanel(panels.get(5));
-                    status = 5;
+                	if(ResDeparture != null &&ResDestination != null &&ResDate != 0){
+	                    flights = getFlight(ResDeparture,ResDestination,ResDate);
+	                    ((AvailableFlightList)panels.get(5)).setFlight(flights);
+	                    setDisplayPanel(panels.get(5));
+	                    status = 5;
+                	}else{
+                		JOptionPane.showMessageDialog(mainFrame,"Empty Field error","All fields must be filled ",JOptionPane.ERROR_MESSAGE);
+                	}
                 }
                 if(action == BACK){
                     setDisplayPanel(panels.get(1));

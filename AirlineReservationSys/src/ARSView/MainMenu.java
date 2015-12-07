@@ -12,9 +12,7 @@ public class MainMenu extends JPanel {
 
 	private int action;
     AppManager manager;
-    public static final int PROCEEDTORESERVATON = 2;
-    public static final int PROCEEDTODELETERES = 3;
-    public static final int PROCEEDACCSETTINGS = 4;
+    
 
 	public MainMenu() {
 		setLayout(null);
@@ -28,7 +26,7 @@ public class MainMenu extends JPanel {
 		newResBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				action =PROCEEDTORESERVATON;
+				action =AppManager.PROCEEDTORESERVATON;
                 manager.update(action);
 
 			}
@@ -41,7 +39,7 @@ public class MainMenu extends JPanel {
         delResBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                action = PROCEEDTODELETERES;
+                action = AppManager.PROCEEDTODELETERES;
                 manager.update(action);
             }
         });
@@ -54,7 +52,7 @@ public class MainMenu extends JPanel {
         accSetBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                action = PROCEEDACCSETTINGS;
+                action = AppManager.PROCEEDACCSETTINGS;
                 manager.update(action);
             }
         });

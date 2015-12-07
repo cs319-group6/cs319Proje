@@ -18,26 +18,29 @@ public class PanelFactory {
     //private JPanel
 
     public PanelFactory(){
-        JPanel reservationPanel = new ReservationPanel();
-        JPanel airportPanel = new AirportPanel();
+    	
+        //JPanel reservationPanel = new ReservationPanel();
+        //JPanel airportPanel = new AirportPanel();
 
-        clerkPanels.add(new LoginPanel());
-        clerkPanels.add(new MainMenu());
-        clerkPanels.add(new ReservationPanel());
-        clerkPanels.add(new DeleteReservation());
-        clerkPanels.add(new ChangeAccountSettings());
-        clerkPanels.add(new AvailableFlightList());
+        
 
     }
     public ArrayList<JPanel> getPanels(User user){
-        //if(user instanceof Clerk){
+        if(user instanceof Clerk){
+        	clerkPanels.add(new LoginPanel());
+            clerkPanels.add(new MainMenu());
+            clerkPanels.add(new ReservationPanel());
+            clerkPanels.add(new DeleteReservation());
+            clerkPanels.add(new ChangeAccountSettings());
+            clerkPanels.add(new AvailableFlightList());
+        	
             return clerkPanels;
-        //}
-//        if(user instanceof Admin){
-//            return adminPanels;
-//        }
+        }
+        if(user instanceof Admin){
+            return adminPanels;
+        }
 
-//        return null;
+        return null;
     }
 
 }
