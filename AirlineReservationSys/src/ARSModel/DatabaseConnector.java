@@ -41,7 +41,7 @@ public class DatabaseConnector {
 	 * 
 	 * 
 	 */
-
+ //SINGLETON PATTERN
 	private static DatabaseConnector dbInstance = null;
 	
 	private DatabaseConnector(){

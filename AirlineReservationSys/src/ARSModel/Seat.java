@@ -61,5 +61,8 @@ public class Seat {
 		return true;
 	}
 	
+	boolean equals(Seat s){
+		return(s.getSeatChar().equalsIgnoreCase(this.seatChar) && s.getSeatNo() == this.getSeatNo());
+	}
 }
 

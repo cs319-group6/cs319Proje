@@ -1,3 +1,5 @@
+package ARSModel;
+
 import java.io.*;
 import java.util.Scanner;
 
@@ -11,7 +13,7 @@ public class SeatingPlanReaderTester {
 		
 		fileScanner.useDelimiter(",");
 		
-		//Ýlk satýrda plan boyutlarý vardý, bu nextler onu atlayýp direk plan'e gecmek icin
+		//ï¿½lk satï¿½rda plan boyutlarï¿½ vardï¿½, bu nextler onu atlayï¿½p direk plan'e gecmek icin
 		System.out.println(fileScanner.next());
 		System.out.println(fileScanner.next());
 		System.out.println(fileScanner.next());
@@ -21,8 +23,8 @@ public class SeatingPlanReaderTester {
 		while(fileScanner.hasNext())
 		{
 			element =fileScanner.next();
-			//en sagdaki elementi alýnca yeni satýra gectiði için iþlem yapmak istediðim stringin sonuna "\n\r" da ekliyodu.
-			//bu ondan kurtulmak için
+			//en sagdaki elementi alï¿½nca yeni satï¿½ra gectiï¿½i iï¿½in iï¿½lem yapmak istediï¿½im stringin sonuna "\n\r" da ekliyodu.
+			//bu ondan kurtulmak iï¿½in
 			if(element.equals(("\r\n")))
 				element =fileScanner.next();
 			
@@ -39,9 +41,9 @@ public class SeatingPlanReaderTester {
 			}
 			else
 			{
-				//LC A B CR C D CR E F RC satýrýný yazdýk artýk seatli satýrlara geçiyoruz
-				// mesela þöyle bir satýr 1,A1,B1,0,C1,D1,0,E1,F1,1
-				//it is left row number. yani 1'i gorduk 1 i direk koy sonra da a1,b1.. leri koyacagýz
+				//LC A B CR C D CR E F RC satï¿½rï¿½nï¿½ yazdï¿½k artï¿½k seatli satï¿½rlara geï¿½iyoruz
+				// mesela ï¿½ï¿½yle bir satï¿½r 1,A1,B1,0,C1,D1,0,E1,F1,1
+				//it is left row number. yani 1'i gorduk 1 i direk koy sonra da a1,b1.. leri koyacagï¿½z
 				System.out.print(element);
 
 				while(fileScanner.hasNext())

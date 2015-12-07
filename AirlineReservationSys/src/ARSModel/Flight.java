@@ -2,7 +2,9 @@ package ARSModel;
 import java.util.Date;
 
 public class Flight {
-
+	int tempNumOfRows = 35;
+	String seatingPlanChars = "ABCDEF";
+	int[] tempSeatArrengement = {3,3};
 	int flightID;
 	String planeType;
 	Airport destination;
@@ -10,7 +12,7 @@ public class Flight {
 	Date dateTime;
 	String status;
 	int duration;
-	Seat[] seats;
+	Seat[][] seats;
 	
 	public Flight()
 	{
@@ -21,7 +23,7 @@ public class Flight {
 		dateTime = new Date();
 		status = "";
 		duration = -1;
-		seats = new Seat[0];
+		seats = new Seat[0][0];
 	}
 	
 	public Flight(int flightID, String planeType, Airport destination, Airport departure,
@@ -34,6 +36,7 @@ public class Flight {
 		this.dateTime = dateTime;
 		//this.status = status;
 		this.duration = duration;
+		generateDefaultSeats();
 		//TODO generate seats according to planeType
 	}
 	
@@ -74,7 +77,7 @@ public class Flight {
 		return duration;
 	}
 	
-	public Seat[] getSeats()
+	public Seat[][] getSeats()
 	{
 		return seats;
 	}
@@ -116,7 +119,7 @@ public class Flight {
 		duration = a;
 	}
 	
-	public void setSeats(Seat[] a)
+	public void setSeats(Seat[][] a)
 	{
 		seats = a;
 	}
@@ -132,6 +135,17 @@ public class Flight {
 		boolean check = false;
 		
 		return check;
+	}
+	
+	public void generateDefaultSeats(){
+		seats = new Seat[tempNumOfRows][seatingPlanChars.length()];
+		for(int i = 0; i< tempNumOfRows; i++){
+			
+			for(int j = 0; j < seatingPlanChars.length(); i++){
+				seats[i][j] = new Seat(i,seatingPlanChars.substring(j, j+1), true);
+			}
+			
+		}
 	}
 	
 	public String toString(){
