@@ -3,18 +3,16 @@ package ARSModel;
 import ARSModel.Admin;
 import ARSModel.Clerk;
 import ARSModel.User;
-import ARSView.AirportPanel;
-import ARSView.ReservationPanel;
+import ARSView.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
-/**
- * Created by burak on 06.12.2015.
- */
+
 public class PanelFactory {
-    private JPanel clerkPanels = new JPanel(new CardLayout());
-    private JPanel adminPanels = new JPanel(new CardLayout());
+    private ArrayList<JPanel> clerkPanels = new ArrayList<>();
+    private ArrayList<JPanel> adminPanels = new ArrayList<>();
 
     private JPanel reservationPanel = new JPanel();
     //private JPanel
@@ -23,18 +21,23 @@ public class PanelFactory {
         JPanel reservationPanel = new ReservationPanel();
         JPanel airportPanel = new AirportPanel();
 
-        clerkPanels.add(reservationPanel,"respanel");
-        clerkPanels.add(airportPanel,"airpanel");
-    }
-    public JPanel getPanels(User user){
-        if(user instanceof Clerk){
-            return clerkPanels;
-        }
-        if(user instanceof Admin){
-            return adminPanels;
-        }
+        clerkPanels.add(new LoginPanel());
+        clerkPanels.add(new MainMenu());
+        clerkPanels.add(new ReservationPanel());
+        clerkPanels.add(new DeleteReservation());
+        clerkPanels.add(new ChangeAccountSettings());
+        clerkPanels.add(new AvailableFlightList());
 
-        return null;
+    }
+    public ArrayList<JPanel> getPanels(User user){
+        //if(user instanceof Clerk){
+            return clerkPanels;
+        //}
+//        if(user instanceof Admin){
+//            return adminPanels;
+//        }
+
+//        return null;
     }
 
 }

@@ -15,7 +15,6 @@ import javax.swing.JPasswordField;
 public class LoginPanel extends JPanel {
     AppManager manager;
     private final int PROCEED = 1;
-    private final int BACK = -1;
 
     private JPasswordField passwordField;
     private JTextField textField;
@@ -52,7 +51,7 @@ public class LoginPanel extends JPanel {
 		add(textField);
 		textField.setColumns(10);
 		
-		JLabel lblUsername = new JLabel("Username");
+		JLabel lblUsername = new JLabel("Handle");
 		lblUsername.setBounds(87, 85, 66, 14);
 		add(lblUsername);
 		

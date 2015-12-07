@@ -1,5 +1,7 @@
 package ARSView;
 
+import ARSController.AppManager;
+
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -9,6 +11,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.JTextField;
 
 public class DeleteReservation extends JPanel {
+	AppManager manager;
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
@@ -75,11 +78,18 @@ public class DeleteReservation extends JPanel {
 		
 		JButton btnGetReservations = new JButton("Get Reservations");
 		btnGetReservations.setBounds(145, 196, 152, 23);
+		btnGetReservations.addActionListener(new ActionListener() {
+			//todo
+			public void actionPerformed(ActionEvent e) {
+				manager.update(manager.PROCEEDTOGETRESERVATION);
+			}
+		});
 		panel.add(btnGetReservations);
 		
 		JButton button = new JButton("<- Return");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				manager.update(manager.BACK);
 			}
 		});
 		button.setBounds(10, 244, 89, 23);

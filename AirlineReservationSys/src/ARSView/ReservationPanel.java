@@ -38,13 +38,10 @@ public class ReservationPanel extends JPanel {
             "11","12","13","14","15","16","17","18","19","20",
             "21","22","23","24","25","26","27","28","29","30","31" };
     public final String[] Month = {"1","2","3","4","5","6","7","8","9","10","11","12"};
+    public static final int LISTFLIGHT = 5;
 
-    {
 
-    }
-	/**
-	 * Create the panel.
-	 */
+
 	public ReservationPanel() {
 		setLayout(null);
 		setBackground(Color.white);
@@ -84,15 +81,17 @@ public class ReservationPanel extends JPanel {
 		lblDate.setBounds(11, 125, 46, 14);
 		add(lblDate);
 		
-		JButton btnBack = new JButton("");
+		JButton btnBack = new JButton("Back");
 		btnBack.setBackground(Color.black);
 		btnBack.setContentAreaFilled(false);
 		btnBack.setBounds(31, 236, 64, 40);
-		try {
-			    Image img1 = ImageIO.read(getClass().getResource("src/images/Ic_arrow_back_36px.png"));
-			    btnBack.setIcon(new ImageIcon(img1));
-			  } catch (IOException ex) {
-		  }
+        btnBack.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                manager.update(manager.BACK);
+
+            }
+        });
 		add(btnBack);
 
 	
@@ -101,6 +100,7 @@ public class ReservationPanel extends JPanel {
 		btnNewButton.setContentAreaFilled(false);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+                manager.update(LISTFLIGHT);
 			}
 		});
 		btnNewButton.setBounds(181, 172, 113, 40);
