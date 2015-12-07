@@ -1,10 +1,11 @@
 package ARSModel;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Flight {
-	int tempNumOfRows = 35;
-	String seatingPlanChars = "ABCDEF";
-	int[] tempSeatArrengement = {3,3};
+	int numOfRows = -1;
+	String seatingPlanChars = "";
+	int[] seatArrengement;
 	int flightID;
 	String planeType;
 	Airport destination;
@@ -36,6 +37,7 @@ public class Flight {
 		this.dateTime = dateTime;
 		//this.status = status;
 		this.duration = duration;
+		setSeatPlan();
 		generateDefaultSeats();
 		//TODO generate seats according to planeType
 	}
@@ -124,6 +126,20 @@ public class Flight {
 		seats = a;
 	}
 	
+	public void setSeatAvailablity(ArrayList<Seat> reserveds){
+		if(reserveds == null)
+			return;
+		int row;
+		int schar;
+		for(int i = 0 ;i < reserveds.size(); i++){
+			row =reserveds.get(i).getSeatNo();
+			schar = seatingPlanChars.indexOf(reserveds.get(i).getSeatChar());
+			seats[row][schar].setAvailable(false);
+			//System.out.println(row + String.valueOf(seatingPlanChars.charAt(schar)) + "is reserved");
+		}
+	}
+	
+	
 	//METHODS
 	public void updateFlight(String seatNo)
 	{
@@ -137,11 +153,24 @@ public class Flight {
 		return check;
 	}
 	
+	public void setSeatPlan(){
+		String[] planType_  = planeType.split(",");
+		planeType = planType_[0];
+		numOfRows = Integer.parseInt(planType_[1]);
+		seatingPlanChars = planType_[2];
+		seatArrengement = new int[planType_.length-3];
+		for(int i = 0; i< seatArrengement.length; i++){
+			seatArrengement[i]  =Integer.parseInt(planType_[i + 3]);
+		}
+		
+	}
+	
 	public void generateDefaultSeats(){
-		seats = new Seat[tempNumOfRows][seatingPlanChars.length()];
-		for(int i = 0; i< tempNumOfRows; i++){
+		seats = new Seat[numOfRows][seatingPlanChars.length()];
+		//System.out.println( "Rows : " + numOfRows + " chars: " + seatingPlanChars);
+		for(int i = 0; i< numOfRows; i++){
 			
-			for(int j = 0; j < seatingPlanChars.length(); i++){
+			for(int j = 0; j < seatingPlanChars.length(); j++){
 				seats[i][j] = new Seat(i,seatingPlanChars.substring(j, j+1), true);
 			}
 			
