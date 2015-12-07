@@ -1,4 +1,6 @@
 package ARSModel;
+
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -37,6 +39,7 @@ public class Flight {
 		this.dateTime = dateTime;
 		//this.status = status;
 		this.duration = duration;
+
 		setSeatPlan();
 		generateDefaultSeats();
 		//TODO generate seats according to planeType
@@ -152,7 +155,7 @@ public class Flight {
 		
 		return check;
 	}
-	
+
 	public void setSeatPlan(){
 		String[] planType_  = planeType.split(",");
 		planeType = planType_[0];

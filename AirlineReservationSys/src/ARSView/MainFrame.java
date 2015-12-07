@@ -1,5 +1,6 @@
 package ARSView;
 
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -8,7 +9,9 @@ import javax.swing.JPanel;
 
 public class MainFrame extends JFrame {
 	
-	public JPanel currentPanel = null;
+	public JPanel currentPanel = new LoginPanel();
+
+
 	public MainFrame() {
 		super();
 		super.addWindowListener(new WindowAdapter() {
@@ -17,13 +20,13 @@ public class MainFrame extends JFrame {
 				System.exit(0);
 			}
 		});
-		
-	
+
 		//this.pack();
 		this.setVisible(true);
 		this.setSize(600, 400);
 	}
-	
+
+
 	public void setPanel(JPanel newPanel){
 		if(currentPanel != null){
 			currentPanel.setVisible(false);

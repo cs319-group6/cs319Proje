@@ -12,7 +12,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 
 public class DatabaseConnector {
-	private  final String ALGORITHM = "AES";
+    private  final String ALGORITHM = "AES";
     private  final String KEY = "1Hbfh667adfDEJ78";
     private final Key aesKey = new SecretKeySpec(KEY.getBytes(), ALGORITHM);
 	private  String db_connect_string = "jdbc:mysql://localhost:3306/AirlineSys";
@@ -99,18 +99,18 @@ public class DatabaseConnector {
 		
         // Create cipher
         Cipher cipher;
-		try {
-			cipher = Cipher.getInstance("AES");
-			// encrypt the text
-	        cipher.init(Cipher.ENCRYPT_MODE, aesKey);
-	        byte[] encrypted = cipher.doFinal(str.getBytes());
-	        StringBuilder sb = new StringBuilder();
+        try {
+            cipher = Cipher.getInstance("AES");
+            // encrypt the text
+            cipher.init(Cipher.ENCRYPT_MODE, aesKey);
+            byte[] encrypted = cipher.doFinal(str.getBytes());
+            StringBuilder sb = new StringBuilder();
             for (byte b: encrypted) {
                 sb.append((char)b);
             }
             // the encrypted String
             String enc = sb.toString();
-	        return enc;
+            return enc;
 	        
 		} catch (NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException | InvalidKeyException e) {
 			// TODO Auto-generated catch block
@@ -688,3 +688,4 @@ public class DatabaseConnector {
 	}
 	
 }
+

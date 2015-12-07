@@ -1,11 +1,39 @@
 package ARSView;
+
+
+import ARSController.AppManager;
+import ARSModel.Flight;
+
 import javax.swing.JPanel;
+import javax.swing.JTable;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class AvailableFlightList extends JPanel {
+	AppManager manager;
+    private final int PROCEEDTOSEATPLAN = 6;
+    private final int BACK = -1;
+    private Flight selectedFlight;
+    private ArrayList<Flight> flights;
+    private JTable table;
+
+	/**
+	 * Create the panel.
+	 */
+
 	public AvailableFlightList() {
 		setLayout(new BorderLayout(0, 0));
 		
@@ -13,20 +41,34 @@ public class AvailableFlightList extends JPanel {
 		add(panel);
 		panel.setLayout(null);
 		
-		JButton btnNewButton = new JButton("> Next");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
-		btnNewButton.setBounds(182, 165, 89, 23);
-		panel.add(btnNewButton);
+		JButton btnNext = new JButton("Proceed");
+		btnNext.setBounds(197, 144, 89, 23);
+		btnNext.setBackground(Color.black);
+		btnNext.setContentAreaFilled(false);
+        btnNext.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                manager.update(PROCEEDTOSEATPLAN);
+            }
+        });
+        add(btnNext);
 		
-		JButton btnNewButton_1 = new JButton("<- Back");
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton_1.setBounds(20, 254, 89, 23);
-		panel.add(btnNewButton_1);
+		JButton btnBack = new JButton("Back");
+		btnBack.setBounds(31, 236, 64, 40);
+		btnBack.setBackground(Color.black);
+		btnBack.setContentAreaFilled(false);
+        btnBack.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                manager.update(BACK);
+            }
+        });
+		add(btnBack);
+
 	}
+
+
+    public void setFlight(ArrayList<Flight> flights) {
+    }
+
 }

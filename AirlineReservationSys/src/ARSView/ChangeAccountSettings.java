@@ -1,5 +1,7 @@
 package ARSView;
 
+import ARSController.AppManager;
+
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.awt.BorderLayout;
@@ -17,6 +19,9 @@ import javax.swing.border.LineBorder;
 import java.awt.Color;
 
 public class ChangeAccountSettings extends JPanel {
+
+	AppManager manage;
+
 	private JTextField passwordField;
 	private JTextField newPassField;
 	private JTextField retypeField;
@@ -31,6 +36,8 @@ public class ChangeAccountSettings extends JPanel {
 		JButton back = new JButton("<- Back");
 		back.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				manage.update(manage.BACK);
+
 			}
 		});
 		back.setBounds(10, 266, 89, 23);
