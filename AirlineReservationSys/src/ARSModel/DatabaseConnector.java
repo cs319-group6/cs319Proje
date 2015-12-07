@@ -490,21 +490,25 @@ public class DatabaseConnector {
 	public Flight addFlight(Airport from, Airport to, String planeType, long dateTime, int duration){
 		try{
 			checkConnection();
-			preStt = conn.prepareStatement("insert into Flight (departure, destination, planeType, dateTime, duration ) values (?,?,?,?,?);");
+			
+			
+			String plane = getPlane(planeType);
+			if(plane == null)
+				return null;
+			preStt = conn.prepareStatement("insert into Flight (departure, destination, dateTime, duration ) values (?,?,?,?);");
 			preStt.setInt(1, from.getAirportID());
 			preStt.setInt(2, to.getAirportID());
-			preStt.setString(3, planeType);
-			preStt.setLong(4, dateTime);
-			preStt.setInt(5, duration);
+			preStt.setLong(3, dateTime);
+			preStt.setInt(4, duration);
 			
 			if(preStt.executeUpdate() == 1){
-				preStt = conn.prepareStatement("Select * from Flight where departure = ? and destination = ? and dateTime = ?;");
+				preStt = conn.prepareStatement("Select * from Flight where departure = ? and destination = ? and dateTime = ? ;");
 				preStt.setInt(1, from.getAirportID());
 				preStt.setInt(2, to.getAirportID());
 				preStt.setLong(3, dateTime);
 				rs = preStt.executeQuery();
 				if(rs.next()){
-					return new Flight( rs.getInt(1),planeType, from, to,  new java.util.Date(dateTime), duration );
+					return new Flight( rs.getInt(1),plane, from, to,  new java.util.Date(dateTime), duration );
 					
 				}else
 					return null;
@@ -515,8 +519,6 @@ public class DatabaseConnector {
 			e.printStackTrace();
 			return null;
 		}
-		
-		
 		
 		
 	}
@@ -531,8 +533,15 @@ public class DatabaseConnector {
 			preStt.setInt(2, to.airportID);    
 			preStt.setLong(3, date);
 			rs = preStt.executeQuery();
+			
 			while(rs.next()){
-				 flights.add(new Flight(rs.getInt(1),rs.getString(2) ,from, to, new java.util.Date(date), rs.getInt(6)));
+				
+				 flights.add(new Flight(rs.getInt(1),getPlane(rs.getInt(2)) ,from, to, new java.util.Date(date), rs.getInt(6)));
+				 
+			}
+			for(int i =0 ; i < flights.size(); i++){
+				
+				flights.get(i).setSeatAvailablity(getReservedSeats(flights.get(i)));
 			}
 			return flights;
 		} catch (SQLException e) {
@@ -551,7 +560,11 @@ public class DatabaseConnector {
 			ResultSet rs = preStt.executeQuery();
 			while(rs.next()){
 				
-				 flights.add(new Flight(rs.getInt(1),rs.getString(2) ,getAirport((int)rs.getInt(3)), getAirport((int)rs.getInt(4)), new java.util.Date(rs.getLong(5)), rs.getInt(6)));
+				 flights.add(new Flight(rs.getInt(1),getPlane(rs.getInt(2)) ,getAirport((int)rs.getInt(3)), getAirport((int)rs.getInt(4)), new java.util.Date(rs.getLong(5)), rs.getInt(6)));
+			}
+			for(int i =0 ; i < flights.size(); i++){
+				
+				flights.get(i).setSeatAvailablity(getReservedSeats(flights.get(i)));
 			}
 			return flights;
 		} catch (SQLException e) {
@@ -607,6 +620,69 @@ public class DatabaseConnector {
 		}catch(SQLException e){
 			e.printStackTrace();
 			return false;
+		}
+		
+	}
+	
+	public String getPlane(String planeType){
+		try{
+			checkConnection();
+			
+			preStt = conn.prepareStatement("Select * from planeType where plane = ?;");
+			preStt.setString(1, planeType);
+			ResultSet rs = preStt.executeQuery() ;
+			if(!rs.next()){
+				return null;
+				
+			}
+			int planeID  = rs.getInt(1);
+			int numOfRows = rs.getInt(3);
+			String seatChars = rs.getString(4);
+			String seatArrengement = rs.getString(5);
+			System.out.println(planeType.concat(",".concat(String.valueOf(numOfRows).concat(",".concat(seatChars.concat(",".concat(seatArrengement)))))));
+			return planeType.concat(",".concat(String.valueOf(numOfRows).concat(",".concat(seatChars.concat(",".concat(seatArrengement))))));
+		}catch (SQLException e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	public String getPlane(int planeID){
+		try{
+			checkConnection();
+			
+			preStt = conn.prepareStatement("Select * from planeType where idplaneType = ?;");
+			preStt.setInt(1, planeID);
+			ResultSet rs = preStt.executeQuery() ;
+			if(!rs.next()){
+				return null;
+				
+			}
+			//int planeID  = rs.getInt(1);
+			String plane = rs.getString(2);
+			
+			return getPlane(plane);
+		}catch (SQLException e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	public ArrayList<Seat> getReservedSeats(Flight f){
+		try{
+			checkConnection();
+			ArrayList<Seat> seats = new ArrayList<Seat>();
+			preStt = conn.prepareStatement("Select * From Reservation where flight = ?;");
+			preStt.setInt(1, f.getFlightID());
+			rs = preStt.executeQuery();
+			
+			
+			while(rs.next()){
+				
+				seats.add(new Seat(rs.getInt(5), rs.getString(6),false));
+			}
+			return seats;
+		}catch(SQLException e){
+			e.printStackTrace();
+			return null;
 		}
 		
 	}
