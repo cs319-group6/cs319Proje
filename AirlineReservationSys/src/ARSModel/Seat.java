@@ -15,7 +15,7 @@ public class Seat {
 	
 	public Seat(int seatNo, String seatChar, boolean available)
 	{
-		this.seatNo = seatNo;
+		this.seatNo = seatNo+1;
 		this.seatChar = seatChar;
 		this.available = available;
 	}
@@ -59,6 +59,10 @@ public class Seat {
 	{
 		available = true;
 		return true;
+	}
+	
+	public String toString(){
+		return seatNo + "-" + seatChar;
 	}
 	
 	boolean equals(Seat s){

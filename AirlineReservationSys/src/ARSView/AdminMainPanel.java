@@ -1,6 +1,9 @@
 package ARSView;
 
 import javax.swing.JPanel;
+
+import ARSController.AppManager;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -9,28 +12,30 @@ public class AdminMainPanel extends JPanel {
 	public AdminMainPanel() {
 		setLayout(null);
 		
-		JButton btnNewButton = new JButton("Flights");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton btnFlights = new JButton("Flights");
+		btnFlights.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				AppManager.update(AppManager.PROCEEDTOFLIGHTMENU);
 			}
 		});
-		btnNewButton.setBounds(154, 61, 135, 29);
-		add(btnNewButton);
+		btnFlights.setBounds(154, 61, 135, 29);
+		add(btnFlights);
 		
-		JButton btnNewButton_1 = new JButton("Users");
-		btnNewButton_1.addActionListener(new ActionListener() {
+		JButton btnUsers = new JButton("Users");
+		btnUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TODO
+				AppManager.update(AppManager.PROCEEDTOUSER);
 			}
 		});
-		btnNewButton_1.setBounds(154, 108, 135, 29);
-		add(btnNewButton_1);
+		btnUsers.setBounds(154, 108, 135, 29);
+		add(btnUsers);
 		
 		JButton btnAirports = new JButton("Airports");
 		btnAirports.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TODO
-				
+				AppManager.update(AppManager.PROCEEDTOAIRPORT);
 			}
 		});
 		btnAirports.setBounds(154, 155, 135, 29);
@@ -40,6 +45,7 @@ public class AdminMainPanel extends JPanel {
 		btnAccountsettings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TODO
+				AppManager.update(AppManager.PROCEEDACCSETTINGS);
 			}
 		});
 		btnAccountsettings.setBounds(154, 196, 135, 29);
@@ -49,6 +55,7 @@ public class AdminMainPanel extends JPanel {
 		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TODO
+				AppManager.update(0);
 			}
 		});
 		btnLogout.setBounds(327, 6, 117, 29);

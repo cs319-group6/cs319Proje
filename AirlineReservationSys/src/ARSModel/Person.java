@@ -1,6 +1,8 @@
 package ARSModel;
 
-public abstract class Person {
+import java.util.Observable;
+
+public abstract class Person extends Observable{
 	
 	int personID;
 	String name;
@@ -67,31 +69,43 @@ public abstract class Person {
 	public void setPersonID(int ID)
 	{
 		personID = ID;
+		setChanged();
+		notifyObservers();
 	}
 	
 	public void setName(String str)
 	{
 		name = str;
+		setChanged();
+		notifyObservers();
 	}
 	
 	public void setSurname(String str)
 	{
 		surname = str;
+		setChanged();
+		notifyObservers();
 	}
 	
 	public void setEmail(String str)
 	{
 		email = str;
+		setChanged();
+		notifyObservers();
 	}
 	
 	public void setSocialSecurityNo(String str)
 	{
 		socialSecurityNo = str;
+		setChanged();
+		notifyObservers();
 	}
 	
 	public void setPhoneNo(String str)
 	{
-		email = str;
+		phoneNo = str;
+		setChanged();
+		notifyObservers();
 	}
 	
 	public String toString(){

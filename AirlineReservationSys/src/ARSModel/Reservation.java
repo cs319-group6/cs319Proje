@@ -43,6 +43,13 @@ public class Reservation {
 		return clerk;
 	}
 	
+	public int getID(){
+		return reservationID;
+	}
+	
+	public Flight getFlight(){
+		return flight;
+	}
 	
 	//SET METHODS
 	public void setPassengers(Passenger a)
@@ -59,7 +66,9 @@ public class Reservation {
 	{
 		clerk = a;
 	}
-	
+	public void getFlight( Flight f){
+		flight = f;
+	}
 	
 	//METHODS
 	public String toString(){

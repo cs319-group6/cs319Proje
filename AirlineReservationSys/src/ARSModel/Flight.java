@@ -2,7 +2,6 @@ package ARSModel;
 
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Flight {
 	int numOfRows = -1;
@@ -12,7 +11,7 @@ public class Flight {
 	String planeType;
 	Airport destination;
 	Airport departure;
-	Date dateTime;
+	ARSDate dateTime;
 	String status;
 	int duration;
 	Seat[][] seats;
@@ -23,14 +22,14 @@ public class Flight {
 		planeType = "";
 		destination = new Airport();
 		departure = new Airport();
-		dateTime = new Date();
+		dateTime = new ARSDate();
 		status = "";
 		duration = -1;
 		seats = new Seat[0][0];
 	}
 	
 	public Flight(int flightID, String planeType, Airport destination, Airport departure,
-					Date dateTime, int duration)
+					ARSDate dateTime, int duration)
 	{
 		this.flightID = flightID;
 		this.planeType = planeType;
@@ -67,7 +66,7 @@ public class Flight {
 		return departure;
 	}
 	
-	public Date getDateTime()
+	public ARSDate getDateTime()
 	{
 		return dateTime;
 	}
@@ -87,6 +86,29 @@ public class Flight {
 		return seats;
 	}
 	
+	public Seat getSeat(int i, int j){
+		return seats[j][i];
+	}
+	
+	public boolean isAvailable(int i ,int j){
+		return seats[j][i].getAvailable();
+	}
+	
+	public void setAvailable(int i, int j, boolean b){
+		seats[j][i].setAvailable(b);
+		
+	}
+	
+	
+	public void cancelReservation(Seat s){
+		for(int i= 0; i < seats.length; i++){
+			for(int j = 0; j < seats[i].length; j ++){
+				if(seats[i][j].equals(s)){
+					seats[i][j].setAvailable(false);
+				}
+			}
+		}
+	}
 	
 	//SET METHODS
 	public void setFlightID(int ID)
@@ -109,7 +131,7 @@ public class Flight {
 		departure = dep;
 	}
 	
-	public void setDateTime(Date c)
+	public void setDateTime(ARSDate c)
 	{
 		dateTime = c;
 	}
@@ -135,13 +157,24 @@ public class Flight {
 		int row;
 		int schar;
 		for(int i = 0 ;i < reserveds.size(); i++){
-			row =reserveds.get(i).getSeatNo();
+			row =reserveds.get(i).getSeatNo()-1;
 			schar = seatingPlanChars.indexOf(reserveds.get(i).getSeatChar());
 			seats[row][schar].setAvailable(false);
 			//System.out.println(row + String.valueOf(seatingPlanChars.charAt(schar)) + "is reserved");
 		}
 	}
-	
+	public void cancelReservation(ArrayList<Seat> reserveds){
+		if(reserveds == null)
+			return;
+		int row;
+		int schar;
+		for(int i = 0 ;i < reserveds.size(); i++){
+			row =reserveds.get(i).getSeatNo()-1;
+			schar = seatingPlanChars.indexOf(reserveds.get(i).getSeatChar());
+			seats[row][schar].setAvailable(true);
+			//System.out.println(row + String.valueOf(seatingPlanChars.charAt(schar)) + "is reserved");
+		}
+	}
 	
 	//METHODS
 	public void updateFlight(String seatNo)

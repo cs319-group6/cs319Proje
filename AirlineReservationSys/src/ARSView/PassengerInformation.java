@@ -7,23 +7,20 @@ import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
+
+import ARSController.AppManager;
+
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JTextPane;
 
 public class PassengerInformation extends JPanel {
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JTextField textField_5;
-	private JTextField textField_6;
-	private JTextField textField_7;
-	private JTextField textField_8;
-	private JTextField textField_9;
-	private JTextField textField_10;
-	private JTextField textField_11;
+	private JTextField soNo;
+	private JTextField name;
+	private JTextField phone;
+	private JTextField surname;
+	private JTextField email;
+	private JButton btnUpdate;
 	public PassengerInformation() {
 		setLayout(null);
 		
@@ -32,153 +29,93 @@ public class PassengerInformation extends JPanel {
 		add(panel);
 		panel.setLayout(null);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panel_1.setBounds(10, 11, 410, 113);
-		panel.add(panel_1);
-		panel_1.setLayout(null);
+		JPanel passengerPanel = new JPanel();
+		passengerPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		passengerPanel.setBounds(10, 32, 410, 208);
+		panel.add(passengerPanel);
+		passengerPanel.setLayout(null);
 		
 		JLabel label_1 = new JLabel("TC Number");
-		label_1.setBounds(10, 10, 53, 14);
-		panel_1.add(label_1);
+		label_1.setBounds(10, 6, 86, 14);
+		passengerPanel.add(label_1);
 		
-		textField = new JTextField();
-		textField.setBounds(10, 32, 86, 20);
-		textField.setColumns(10);
-		panel_1.add(textField);
+		soNo = new JTextField();
+		soNo.setBounds(10, 32, 86, 20);
+		soNo.setColumns(10);
+		soNo.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AppManager.getPassenger(soNo.getText());
+		    	  if(AppManager.ResPassenger != null){
+			    	  name.setText(AppManager.ResPassenger.getName() );
+			    	  surname.setText(AppManager.ResPassenger.getSurname());
+			    	  email.setText(AppManager.ResPassenger.getEmail());
+			    	  phone.setText(AppManager.ResPassenger.getPhoneNo());
+			    	  name.setEditable(false);
+			    	  surname.setEditable(false);
+			    	  email.setEditable(false);
+			    	  phone.setEditable(false);
+			    	  btnUpdate.setText("Update");
+		    	  }else{
+		    		  AppManager.error(AppManager.NOPASSENGERFOUND);
+		    		  name.setText("");
+		    		  surname.setText("");
+		    		  phone.setText("");
+		    		  email.setText("");
+		    		  name.setEditable(true);
+			    	  surname.setEditable(true);
+			    	  email.setEditable(true);
+			    	  phone.setEditable(true);
+			    	  btnUpdate.setText("Save");
+		    	  }
+				
+			}
+		});
+		passengerPanel.add(soNo);
 		
-		JLabel label_2 = new JLabel("Name*");
-		label_2.setBounds(131, 10, 33, 14);
-		panel_1.add(label_2);
+		JLabel lblName = new JLabel("Name");
+		lblName.setBounds(10, 80, 53, 14);
+		passengerPanel.add(lblName);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(131, 32, 86, 20);
-		textField_1.setColumns(10);
-		panel_1.add(textField_1);
+		name = new JTextField();
+		name.setBounds(10, 104, 86, 20);
+		name.setColumns(10);
+		passengerPanel.add(name);
 		
-		JLabel label_3 = new JLabel("Surname*");
-		label_3.setBounds(243, 10, 48, 14);
-		panel_1.add(label_3);
+		JLabel lblSurname = new JLabel("Surname");
+		lblSurname.setBounds(132, 80, 81, 14);
+		passengerPanel.add(lblSurname);
 		
-		textField_2 = new JTextField();
-		textField_2.setBounds(10, 82, 86, 20);
-		textField_2.setColumns(10);
-		panel_1.add(textField_2);
+		phone = new JTextField();
+		phone.setBounds(265, 104, 86, 20);
+		phone.setColumns(10);
+		passengerPanel.add(phone);
 		
-		JLabel label_4 = new JLabel("Phone Number*");
-		label_4.setBounds(106, 63, 76, 14);
-		panel_1.add(label_4);
+		JLabel lblPhone = new JLabel("Phone");
+		lblPhone.setBounds(268, 80, 56, 14);
+		passengerPanel.add(lblPhone);
 		
-		textField_3 = new JTextField();
-		textField_3.setBounds(243, 32, 86, 20);
-		textField_3.setColumns(10);
-		panel_1.add(textField_3);
+		surname = new JTextField();
+		surname.setBounds(132, 104, 86, 20);
+		surname.setColumns(10);
+		passengerPanel.add(surname);
 		
-		JLabel label_5 = new JLabel("Date of Birth*");
-		label_5.setBounds(10, 63, 67, 14);
-		panel_1.add(label_5);
+		email = new JTextField();
+		email.setBounds(83, 169, 228, 20);
+		email.setColumns(10);
+		passengerPanel.add(email);
 		
-		textField_4 = new JTextField();
-		textField_4.setBounds(106, 82, 86, 20);
-		textField_4.setColumns(10);
-		panel_1.add(textField_4);
-		
-		JLabel lblEmail = new JLabel("E-mail*");
-		lblEmail.setBounds(202, 63, 76, 14);
-		panel_1.add(lblEmail);
-		
-		textField_5 = new JTextField();
-		textField_5.setColumns(10);
-		textField_5.setBounds(202, 82, 86, 20);
-		panel_1.add(textField_5);
-		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setToolTipText("Citizenship");
-		comboBox.setBounds(305, 82, 95, 20);
-		panel_1.add(comboBox);
-		
-		JLabel lblCitizenship = new JLabel("Citizenship");
-		lblCitizenship.setBounds(305, 63, 76, 14);
-		panel_1.add(lblCitizenship);
-		
-		JPanel panel_2 = new JPanel();
-		panel_2.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panel_2.setBounds(10, 135, 410, 114);
-		panel.add(panel_2);
-		panel_2.setLayout(null);
-		
-		JPanel panel_3 = new JPanel();
-		panel_3.setLayout(null);
-		panel_3.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panel_3.setBounds(0, 0, 410, 113);
-		panel_2.add(panel_3);
-		
-		JLabel label_6 = new JLabel("TC Number");
-		label_6.setBounds(10, 10, 53, 14);
-		panel_3.add(label_6);
-		
-		textField_6 = new JTextField();
-		textField_6.setColumns(10);
-		textField_6.setBounds(10, 32, 86, 20);
-		panel_3.add(textField_6);
-		
-		JLabel label_7 = new JLabel("Name*");
-		label_7.setBounds(131, 10, 33, 14);
-		panel_3.add(label_7);
-		
-		textField_7 = new JTextField();
-		textField_7.setColumns(10);
-		textField_7.setBounds(131, 32, 86, 20);
-		panel_3.add(textField_7);
-		
-		JLabel label_8 = new JLabel("Surname*");
-		label_8.setBounds(243, 10, 48, 14);
-		panel_3.add(label_8);
-		
-		textField_8 = new JTextField();
-		textField_8.setColumns(10);
-		textField_8.setBounds(10, 82, 86, 20);
-		panel_3.add(textField_8);
-		
-		JLabel label_9 = new JLabel("Phone Number*");
-		label_9.setBounds(106, 63, 76, 14);
-		panel_3.add(label_9);
-		
-		textField_9 = new JTextField();
-		textField_9.setColumns(10);
-		textField_9.setBounds(243, 32, 86, 20);
-		panel_3.add(textField_9);
-		
-		JLabel label_10 = new JLabel("Date of Birth*");
-		label_10.setBounds(10, 63, 67, 14);
-		panel_3.add(label_10);
-		
-		textField_10 = new JTextField();
-		textField_10.setColumns(10);
-		textField_10.setBounds(106, 82, 86, 20);
-		panel_3.add(textField_10);
-		
-		JLabel label_11 = new JLabel("E-mail*");
-		label_11.setBounds(202, 63, 76, 14);
-		panel_3.add(label_11);
-		
-		textField_11 = new JTextField();
-		textField_11.setColumns(10);
-		textField_11.setBounds(202, 82, 86, 20);
-		panel_3.add(textField_11);
-		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setToolTipText("Citizenship");
-		comboBox_1.setBounds(305, 82, 95, 20);
-		panel_3.add(comboBox_1);
-		
-		JLabel label_12 = new JLabel("Citizenship");
-		label_12.setBounds(305, 63, 76, 14);
-		panel_3.add(label_12);
+		JLabel lblEmail = new JLabel("E-mail");
+		lblEmail.setBounds(83, 150, 76, 14);
+		passengerPanel.add(lblEmail);
 		
 		JButton btnNewButton = new JButton("<- Return");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				AppManager.cancelReservation();
+				AppManager.update(AppManager.PROCEEDTOSEATPLAN);
+				
 			}
 		});
 		btnNewButton.setBounds(10, 255, 89, 23);
@@ -186,14 +123,91 @@ public class PassengerInformation extends JPanel {
 		
 		JButton btnFinish = new JButton("Finish");
 		btnFinish.setBounds(331, 255, 89, 23);
+		btnFinish.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(!AppManager.makeReservation()){
+					AppManager.error(AppManager.RESERVATIONERROR);
+				}else{
+					AppManager.success();
+					AppManager.update(AppManager.PROCEEDTOMAIN);
+				}
+			}
+		});
 		panel.add(btnFinish);
 		
 		JLabel lblPassenger = new JLabel("Passenger");
-		lblPassenger.setBounds(26, 0, 89, 14);
+		lblPassenger.setBounds(24, 6, 89, 14);
 		panel.add(lblPassenger);
 		
-		JLabel label = new JLabel("Passenger");
-		label.setBounds(20, 121, 89, 14);
-		panel.add(label);
+		btnUpdate = new JButton("Save");
+		btnUpdate.setBounds(216, 252, 89, 29);
+		btnUpdate.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(((JButton)e.getSource()).getText().equals("Save")){
+					if(soNo.isEditable()){
+						if(!(name.getText().equals("") && surname.getText().equals("") && email.getText().equals("") && soNo.getText().equals("") && phone.getText().equals("") )){
+							if(!AppManager.addPassenger(name.getText(), surname.getText(),email.getText(),soNo.getText(),phone.getText())){
+								AppManager.error(AppManager.PASSENGERSAVEERROR);
+							}else{
+								soNo.setEditable(true);
+								name.setEditable(false);
+						    	surname.setEditable(false);
+						    	email.setEditable(false);
+						    	phone.setEditable(false);
+						    	btnUpdate.setText("Update");
+							}
+						}else{
+							AppManager.error(AppManager.EMPTYFIELD);
+						}
+				//		AppManager.addPassenger(name.getText(), surname.getText(),email.getText(),soNo.getText(),phone.getText());
+					}else{
+						if(AppManager.updatePassenger(name.getText(), surname.getText(),email.getText(),soNo.getText(),phone.getText())){
+							soNo.setEditable(true);
+							name.setEditable(false);
+					    	surname.setEditable(false);
+					    	email.setEditable(false);
+					    	phone.setEditable(false);
+					    	btnUpdate.setText("Update");
+						}
+					}
+				}else if(((JButton)e.getSource()).getText().equals("Update")){
+					soNo.setEditable(false);
+					name.setEditable(true);
+			    	surname.setEditable(true);
+			    	email.setEditable(true);
+			    	phone.setEditable(true);
+			    	btnUpdate.setText("Save");
+				}
+			}
+		});
+		panel.add(btnUpdate);
+		
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.setBounds(111, 252, 89, 29);
+		btnCancel.addActionListener( new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				AppManager.cancelReservation();
+				AppManager.update(AppManager.CANCEL);
+				
+			}
+		});
+		panel.add(btnCancel);
 	}
+	
+	public void initiliaze(){
+		soNo.setText("");
+		name.setText("");
+		phone.setText("");
+		surname.setText("");
+		email.setText("");
+	}
+	
 }

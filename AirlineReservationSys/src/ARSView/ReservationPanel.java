@@ -45,7 +45,7 @@ public class ReservationPanel extends JPanel {
             "21","22","23","24","25","26","27","28","29","30","31" };
     public final String[] Month = {"1","2","3","4","5","6","7","8","9","10","11","12"};
     public final String[] Year = {"2015", "2016"};
-
+    public JComboBox destinationCB, departureCB;
 
 	public ReservationPanel() {
 		setLayout(null);
@@ -59,17 +59,56 @@ public class ReservationPanel extends JPanel {
 		lblTo.setBounds(11, 76, 46, 14);
 		add(lblTo);
 		
-		Vector<ComboBItem> combo = getComboBoxItems();
+		Vector<ComboBItem> combo = getComboBoxItems(null, null);
 		
-		JComboBox departureCB = new JComboBox(combo);
+		departureCB = new JComboBox(combo);
 		departureCB.setBackground(Color.white);
 		departureCB.setBounds(67, 25, 254, 20);
+		departureCB.addActionListener (new ActionListener () {
+		    public void actionPerformed(ActionEvent e) {
+		    	/*if(destinationCB.getSelectedItem() == null && departureCB.getSelectedItem() != null){
+			    	Vector<ComboBItem> comboA = getComboBoxItems(((ComboBItem)(departureCB.getSelectedItem())).getAirport(), null);
+			    	if(comboA.size() >1 ){
+			    		destinationCB.removeAllItems();
+				    	for(int i = 0;i < comboA.size();i++){
+				    		destinationCB.addItem(comboA.get(i));
+				    	}
+			    	}else{
+			    		AppManager.error(AppManager.NOFLIGHTAVAILABLE);
+			    	}
+		    	}*/
+		        
+		    }
+		});
+		//departureCB.setSelectedItem(null);
 		add(departureCB);
 		
-		JComboBox destinationCB = new JComboBox(combo);
+		destinationCB = new JComboBox(combo);
 		destinationCB.setBounds(67, 73, 254, 20);
 		destinationCB.setBackground(Color.white);
-
+		destinationCB.addActionListener (new ActionListener (){
+			public void actionPerformed(ActionEvent e) {
+				/*if(departureCB.getSelectedItem() == null && destinationCB.getSelectedItem() != null){
+			    	Vector<ComboBItem> comboA = getComboBoxItems(((ComboBItem)(destinationCB.getSelectedItem())).getAirport(), null);
+			    	
+			    	if(comboA.size() > 1 ){
+			    		departureCB.removeAllItems();
+				    	for(int i = 0;i < comboA.size();i++){
+				    		departureCB.addItem(comboA.get(i));
+				    	}
+			    	}else{
+			    		AppManager.error(AppManager.NOFLIGHTAVAILABLE);
+			    	}
+		    	}/*if(destinationCB.getSelectedItem() == null){
+		    		Vector<ComboBItem> comboB = getComboBoxItems(null, null);
+		    		departureCB.removeAllItems();
+			    	for(int i = 0;i < comboB.size();i++){
+			    		departureCB.addItem(comboB.get(i));
+			    	}
+		    	}*/
+			}
+		});
+		//destinationCB.setSelectedItem(null);
 		add(destinationCB);
 		
 		JComboBox DayCB = new JComboBox(Day);
@@ -114,10 +153,10 @@ public class ReservationPanel extends JPanel {
 		listFlightButton.setContentAreaFilled(false);
 		listFlightButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if( ((ComboBItem)departureCB.getSelectedItem()).getAirport() != null && ((ComboBItem)destinationCB.getSelectedItem()).getAirport() != null 
+				if( departureCB.getSelectedItem()!= null && destinationCB.getSelectedItem() != null &&((ComboBItem)departureCB.getSelectedItem()).getAirport() != null && ((ComboBItem)destinationCB.getSelectedItem()).getAirport() != null 
 						&& YearCB.getSelectedItem() != null && MonthCB.getSelectedItem() != null && DayCB.getSelectedItem() != null){
 					int year = YearCB.getSelectedIndex()+2015;
-					int month = MonthCB.getSelectedIndex()+1;
+					int month = MonthCB.getSelectedIndex();
 					int day = DayCB.getSelectedIndex()+1;
 					if(checkDate(year,month,day )){
 						AppManager.ResDeparture = ((ComboBItem)departureCB.getSelectedItem()).getAirport();
@@ -132,15 +171,22 @@ public class ReservationPanel extends JPanel {
 				}
 			}
 		});
-		listFlightButton.setBounds(181, 172, 113, 40);
+		listFlightButton.setBounds(185, 236, 113, 40);
 		add(listFlightButton);
 
 	}
 	
-	private Vector<ComboBItem> getComboBoxItems(){
-		ArrayList<Airport> airports = AppManager.getAllAirports();
+	private Vector<ComboBItem> getComboBoxItems(Airport departure, Airport destination){
+		ArrayList<Airport> airports = new ArrayList<Airport>();
+		if(departure == null && destination == null){
+			airports = AppManager.getAllAirports();
+		}else if(destination == null && departure != null){
+			airports = AppManager.getDestAirportsFrom(departure);
+		}else if(destination != null && departure == null){
+			airports = AppManager.getDepartAirportsTo(departure);
+		}
 		Vector<ComboBItem> combo = new Vector<ComboBItem>(airports.size()+1);
-		combo.add(new ComboBItem(null));
+		combo.add(null);
 		for(int i = 0; i< airports.size(); i++ ){
 			combo.add(new ComboBItem(airports.get(i)));
 		}
@@ -192,5 +238,17 @@ public class ReservationPanel extends JPanel {
 		c.set(Calendar.DAY_OF_MONTH, day);
 		
 		return c.getTime().getTime();
+	}
+
+	public void initialize(){
+		Vector<ComboBItem> combo = getComboBoxItems(null, null);
+		departureCB.removeAllItems();
+    	for(int i = 0;i < combo.size();i++){
+    		departureCB.addItem(combo.get(i));
+    	}
+    	destinationCB.removeAllItems();
+    	for(int i = 0;i < combo.size();i++){
+    		destinationCB.addItem(combo.get(i));
+    	}
 	}
 }

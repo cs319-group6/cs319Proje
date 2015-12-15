@@ -52,11 +52,11 @@ public class LoginPanel extends JPanel {
 		add(textField);
 		textField.setColumns(10);
 		
-		JLabel lblUsername = new JLabel("Handle");
+		JLabel lblUsername = new JLabel("UserID");
 		lblUsername.setBounds(87, 85, 66, 14);
 		add(lblUsername);
 		
-		JLabel lblPassword = new JLabel("Pass");
+		JLabel lblPassword = new JLabel("Password");
 		lblPassword.setBounds(87, 116, 46, 14);
 		add(lblPassword);
 		
