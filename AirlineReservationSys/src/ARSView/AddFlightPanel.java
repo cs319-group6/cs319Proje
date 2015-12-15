@@ -184,4 +184,13 @@ public class AddFlightPanel extends JPanel {
 		  return true;
 		}
 	}
+	public void initiliaze(){
+		departure.setSelectedIndex(0);
+		destination.setSelectedIndex(0); 
+		year.setSelectedIndex(0);
+		month.setSelectedIndex(0);
+		day.setSelectedIndex(0);
+		hour.setSelectedIndex(0);
+		minute.setSelectedIndex(0);
+	}
 }

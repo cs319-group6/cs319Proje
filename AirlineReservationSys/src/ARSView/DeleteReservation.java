@@ -111,6 +111,11 @@ public class DeleteReservation extends JPanel {
 		panel.add(lblPassenger);
 	}
 	
-
+	public void initiliaze(){
+		socialNo.setText("");
+		name.setText("");
+		surname.setText("");
+		phone.setText("");
+	}
 
 }

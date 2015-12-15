@@ -40,12 +40,15 @@ public class SeatPlan extends JPanel {
 				x = x + 20;
 			for (int j = 0 ; j < buttons[i].length; j++){
 				
-				buttons[i][j] = new JCheckBox(""+ i + "," + j);
+				buttons[i][j] = new JCheckBox("");
+				buttons[i][j].setName(""+ i + "," + j);
 				buttons[i][j].setBackground(SystemColor.text);
 				buttons[i][j].setForeground(Color.BLACK);
 				buttons[i][j].setBounds(x, y, 14, 20);
 				if(AppManager.ResFlight != null){
 					buttons[i][j].setEnabled(AppManager.ResFlight.isAvailable(i,j));
+					if(!AppManager.ResFlight.isAvailable(i,j))
+					buttons[i][j].setBackground(Color.RED);
 					//buttons[i][j].setSelected(!AppManager.ResFlight.isAvailable(i,j));
 				}
 				buttons[i][j].addActionListener(new ActionListener() {
@@ -53,7 +56,7 @@ public class SeatPlan extends JPanel {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
-						String seat = ((JCheckBox)(e.getSource())).getText();
+						String seat = ((JCheckBox)(e.getSource())).getName();
 						int row = Integer.parseInt(seat.substring(2));
 						int column = Integer.parseInt(seat.substring(0, 1));
 						

@@ -37,12 +37,19 @@ public class ReservationListPanel extends JPanel {
             	//TODO for each reservation in reservations at selected rowds add to delreservations
             	if(table.getSelectedRows().length > 0){	
             		for(int i = 0; i < table.getSelectedRows().length; i++){
-	            		AppManager.DelReservations.add(AppManager.reservations.get(table.getSelectedRows()[i]));
+	            		if(AppManager.DelReservations.add(AppManager.reservations.get(table.getSelectedRows()[i]))){
+	            			
+	            		}
+	            			
 	            		
 	            	}
             	
             		if(!AppManager.deleteReservations())
             			AppManager.error(AppManager.ERROR);
+            		else{
+            			AppManager.success();
+            			AppManager.update(AppManager.PROCEEDTORESERVATIONLIST);
+            		}
             	}
             	else{
             		AppManager.error(AppManager.NORESERVATIONSELECTED);

@@ -290,6 +290,7 @@ public class AppManager {
                     status = 2;
                 }
                 if(action == PROCEEDTODELETERES){
+                	((DeleteReservation)panels.get(3)).initiliaze();
                     setDisplayPanel(panels.get(3));
                     status = 3;
                 }
@@ -334,6 +335,7 @@ public class AppManager {
                 	}
                 }
                 if(action == PROCEEDTOADDFLIGHT){
+                	((AddFlightPanel)panels.get(6)).initiliaze();
                 	setDisplayPanel(panels.get(6));
                 	status = 2;
                 }
