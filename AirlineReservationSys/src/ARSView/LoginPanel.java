@@ -14,8 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 
 public class LoginPanel extends JPanel {
-    AppManager manager;
-    private final int PROCEED = 1;
+    //AppManager manager;
+    //private final int PROCEED = 1;
 
     private JPasswordField passwordField;
     private JTextField textField;
@@ -40,8 +40,8 @@ public class LoginPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				id = textField.getText();
 				password = passwordField.getPassword();
-                action = PROCEED;
-                manager.update(action,id,password);
+                action = AppManager.PROCEEDTOMAIN;
+                AppManager.update(action,id,password);
 			}
 		});
 
@@ -52,11 +52,11 @@ public class LoginPanel extends JPanel {
 		add(textField);
 		textField.setColumns(10);
 		
-		JLabel lblUsername = new JLabel("Handle");
+		JLabel lblUsername = new JLabel("UserID");
 		lblUsername.setBounds(87, 85, 66, 14);
 		add(lblUsername);
 		
-		JLabel lblPassword = new JLabel("Pass");
+		JLabel lblPassword = new JLabel("Password");
 		lblPassword.setBounds(87, 116, 46, 14);
 		add(lblPassword);
 		

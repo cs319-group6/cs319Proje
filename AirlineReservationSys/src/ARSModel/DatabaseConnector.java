@@ -1,6 +1,7 @@
 package ARSModel;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
@@ -23,7 +24,7 @@ public class DatabaseConnector {
 	protected  Statement statement;
 	protected  ResultSet rs;
 	protected  PreparedStatement preStt;
-	
+	protected java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	/*
 	 * 
@@ -147,10 +148,10 @@ public class DatabaseConnector {
 			checkConnection();
 			preStt = conn.prepareStatement("Select * from User where idUser = ? and password =  ?;");
 			preStt.setInt(1, userID);
-			preStt.setString(2, encrypt(password));
+			preStt.setString(2, password);
 			rs = preStt.executeQuery();
 			if(rs.next()){
-				boolean isAdmin = rs.getBoolean(6);
+				boolean isAdmin = rs.getBoolean(8);
 				if(isAdmin){
 					//return new Admin( rs.getInt(1), decrypt(rs.getString(2)), rs.getString(3), rs.getString(4), decrypt(rs.getString(5)), decrypt(rs.getString(6)), decrypt(rs.getString(7)) );
 					return new Admin( rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7) );
@@ -245,12 +246,59 @@ public class DatabaseConnector {
 			return false;
 		}
 	}
+	
+public boolean updateUser(int userID, String password, String email, String phone ){
+		
+		try {
+			checkConnection();
+			preStt = conn.prepareStatement("Update User set password = ?, userEmail= ?, phone = ? where idUser  = ?;");
+			preStt.setString(1, password);
+			preStt.setString(2, email);
+			preStt.setString(3, phone);
+			preStt.setInt(4, userID);
+			
+			if(preStt.executeUpdate()== 1){
+				return true;
+			}
+			return false;
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 	public User getUserByID(int id){
 		try {
 			checkConnection();
 			preStt = conn.prepareStatement("Select * from User where idUser = ?;");
 			preStt.setInt(1, id);
+			rs = preStt.executeQuery();
+			if(rs.next()){
+				boolean isAdmin = rs.getBoolean(6);
+				if(isAdmin){
+					//return new Admin( rs.getInt(1), decrypt(rs.getString(2)), rs.getString(3), rs.getString(4), decrypt(rs.getString(5)), decrypt(rs.getString(6)), decrypt(rs.getString(7)) );
+					return new Admin( rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7));
+				}else {
+					//return new Clerk( rs.getInt(1), decrypt(rs.getString(2)), rs.getString(3), rs.getString(4), decrypt(rs.getString(5)), decrypt(rs.getString(6)), decrypt(rs.getString(7)) );
+					return new Clerk( rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7));
+				}
+			}
+			return null;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	public User getUserSoNo(String soNo){
+		try {
+			checkConnection();
+			preStt = conn.prepareStatement("Select * from User where socialsecurityno = ?;");
+			preStt.setString(1,soNo);
 			rs = preStt.executeQuery();
 			if(rs.next()){
 				boolean isAdmin = rs.getBoolean(6);
@@ -350,11 +398,11 @@ public class DatabaseConnector {
 		}
 	}
 
-	public Passenger getPassenger(String email){
+	public Passenger getPassenger(String socialsecurityno){
 		try {
 			checkConnection();
-			preStt = conn.prepareStatement("Select * from Passenger where PassEmail = ?;");
-			preStt.setString(1, email);
+			preStt = conn.prepareStatement("Select * from Passenger where socialsecurityno = ?;");
+			preStt.setString(1, socialsecurityno);
 			rs = preStt.executeQuery();
 			if(rs.next()){
 				return new Passenger(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6));
@@ -365,6 +413,27 @@ public class DatabaseConnector {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	public boolean updatePassenger(String name, String surname, String email, String SoNo, String phone){
+		try {
+			checkConnection();
+			preStt = conn.prepareStatement("Update  Passenger set PassName = ?, PassSurname = ?, PassEmail = ?, phone = ?  where socialsecurityno = ?  ;");
+			preStt.setString(1, name);
+			preStt.setString(2, surname);
+			preStt.setString(3, email);
+			preStt.setString(4, phone);
+			preStt.setString(5, SoNo);
+			//rs = preStt.executeQuery();
+			if(preStt.executeUpdate() == 1){
+				return true;
+			}
+			return false;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		
 	}
 	
 	public ArrayList<Passenger> getAllPassengers(){
@@ -414,6 +483,8 @@ public class DatabaseConnector {
 		}
 		
 	}
+	
+
 
 	public ArrayList<Airport> getAirports(String country, String city){
 		try {
@@ -485,9 +556,25 @@ public class DatabaseConnector {
 			return null;
 		}
 	}
-	
+	public boolean deleteAirport(String name){
+		try {
+			checkConnection();
+			preStt = conn.prepareStatement("Delete from Airport where AirportName = ?;");
+			preStt.setString(1, name);
+			//rs = preStt.executeQuery();
+			if(preStt.executeUpdate() == 1){
+				 return true;
+			}
+			return false;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
 	//TODO *****************
-	public Flight addFlight(Airport from, Airport to, String planeType, long dateTime, int duration){
+	public Flight addFlight(Airport from, Airport to, int planeType, ARSDate dateTime, int duration){
 		try{
 			checkConnection();
 			
@@ -495,20 +582,23 @@ public class DatabaseConnector {
 			String plane = getPlane(planeType);
 			if(plane == null)
 				return null;
-			preStt = conn.prepareStatement("insert into Flight (departure, destination, dateTime, duration ) values (?,?,?,?);");
+			preStt = conn.prepareStatement("insert into Flight (departure, destination,planeType, date, time , duration ) values (?,?,?,?,?,?);");
 			preStt.setInt(1, from.getAirportID());
 			preStt.setInt(2, to.getAirportID());
-			preStt.setLong(3, dateTime);
-			preStt.setInt(4, duration);
+			preStt.setInt(3, planeType);
+			preStt.setString(4, dateTime.getDate());
+			preStt.setString(5, dateTime.getTime());
+			preStt.setInt(6, duration);
 			
 			if(preStt.executeUpdate() == 1){
-				preStt = conn.prepareStatement("Select * from Flight where departure = ? and destination = ? and dateTime = ? ;");
+				preStt = conn.prepareStatement("Select * from Flight where departure = ? and destination = ? and date = ? and time = ? ;");
 				preStt.setInt(1, from.getAirportID());
 				preStt.setInt(2, to.getAirportID());
-				preStt.setLong(3, dateTime);
+				preStt.setString(3, dateTime.getDate());
+				preStt.setString(4, dateTime.getTime());
 				rs = preStt.executeQuery();
 				if(rs.next()){
-					return new Flight( rs.getInt(1),plane, from, to,  new java.util.Date(dateTime), duration );
+					return new Flight( rs.getInt(1),plane, from, to,  dateTime, duration );
 					
 				}else
 					return null;
@@ -523,20 +613,51 @@ public class DatabaseConnector {
 		
 	}
 	
+	public Flight getFlight(Airport from, Airport to, ARSDate dateTime){
+		try {
+			checkConnection();
+			Flight flight = null;
+			preStt = conn.prepareStatement("Select * from Flight where departure = ? and destination = ? and date = ? and time =?;");
+			preStt.setInt(1, from.getAirportID());
+			preStt.setInt(2, to.airportID);    
+			preStt.setString(3, dateTime.getDate());
+			preStt.setString(4, dateTime.getTime() );
+			rs = preStt.executeQuery();
+			
+			if(rs.next()){
+				
+				 flight = new Flight(rs.getInt(1),getPlane(rs.getInt(2)) ,from, to, dateTime, rs.getInt(7));
+				 
+			}
+			
+				
+				flight.setSeatAvailablity(getReservedSeats(flight));
+
+			return flight;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
 	//TODO getFlight()
-	public ArrayList<Flight> getFlight(Airport from, Airport to, long date){
+	public ArrayList<Flight> getFlightAtDate(Airport from, Airport to, ARSDate dateTime){
 		try {
 			checkConnection();
 			ArrayList<Flight> flights = new ArrayList<Flight>();
-			preStt = conn.prepareStatement("Select * from Flight where departure = ? and destination = ? and dateTime = ?;");
+			
+			//System.out.println(datestr.substring(0, 10));
+			preStt = conn.prepareStatement("Select * from Flight where departure = ? and destination = ? and date = ?;");
 			preStt.setInt(1, from.getAirportID());
-			preStt.setInt(2, to.airportID);    
-			preStt.setLong(3, date);
+			preStt.setInt(2, to.getAirportID());    
+			preStt.setString(3, dateTime.getDate() );
 			rs = preStt.executeQuery();
 			
 			while(rs.next()){
 				
-				 flights.add(new Flight(rs.getInt(1),getPlane(rs.getInt(2)) ,from, to, new java.util.Date(date), rs.getInt(6)));
+				 flights.add(new Flight(rs.getInt(1),getPlane(rs.getInt(2)) ,from, to, new ARSDate(rs.getString(5),rs.getString(6)), rs.getInt(7)));
 				 
 			}
 			for(int i =0 ; i < flights.size(); i++){
@@ -560,7 +681,7 @@ public class DatabaseConnector {
 			ResultSet rs = preStt.executeQuery();
 			while(rs.next()){
 				
-				 flights.add(new Flight(rs.getInt(1),getPlane(rs.getInt(2)) ,getAirport((int)rs.getInt(3)), getAirport((int)rs.getInt(4)), new java.util.Date(rs.getLong(5)), rs.getInt(6)));
+				 flights.add(new Flight(rs.getInt(1),getPlane(rs.getInt(2)) ,getAirport((int)rs.getInt(3)), getAirport((int)rs.getInt(4)), new ARSDate(rs.getString(5), rs.getString(6)), rs.getInt(7)));
 			}
 			for(int i =0 ; i < flights.size(); i++){
 				
@@ -574,6 +695,29 @@ public class DatabaseConnector {
 		}
 		
 	}
+	
+	public Flight getFlight(int id){
+		try {
+			checkConnection();
+			Flight f = null ;
+			preStt = conn.prepareStatement("Select * from Flight  where idFlight = ?;");
+			preStt.setInt(1, id);
+			ResultSet rs = preStt.executeQuery();
+			if (rs.next()){
+				 f = new Flight(rs.getInt(1),getPlane(rs.getInt(2)) ,getAirport((int)rs.getInt(3)), getAirport((int)rs.getInt(4)), new ARSDate(rs.getString(5), rs.getString(6)), rs.getInt(7));
+			}
+			if(f != null){
+				
+				f.setSeatAvailablity(getReservedSeats(f));
+			}
+			return f;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	
 	public Reservation addReservation(Flight flight, Passenger pass, Clerk clerk, Seat seat){
 		try{
@@ -606,6 +750,106 @@ public class DatabaseConnector {
 		
 	}
 	
+	public Reservation addReservation(Flight flight, Clerk clerk, Seat seat){
+		try{
+			checkConnection();
+			preStt = conn.prepareStatement("insert into Reservation (flight, clerk, seatNo, seatChar ) values (?,?,?,?);");
+			preStt.setInt(1, flight.getFlightID());
+			//preStt.setInt(2, pass.getPersonID());
+			preStt.setInt(2, clerk.getPersonID());
+			preStt.setInt(3, seat.getSeatNo());
+			preStt.setString(4, seat.getSeatChar());
+			
+			if(preStt.executeUpdate() == 1){
+				preStt = conn.prepareStatement("Select * from Reservation where seatNo = ? and seatChar = ? and flight = ?;");
+				preStt.setInt(1, seat.getSeatNo());
+				preStt.setString(2, seat.getSeatChar());
+				preStt.setInt(3, flight.getFlightID());
+				rs = preStt.executeQuery();
+				if(rs.next()){
+					return new Reservation( rs.getInt(1),flight, null,  seat, clerk );
+					
+				}else
+					return null;
+				
+			}
+			return null;
+		}catch(SQLException e){
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	public Reservation getReservation(Flight flight, Clerk clerk, Seat seat){
+		try{
+			checkConnection();
+			
+			preStt = conn.prepareStatement("Select * from Reservation where seatNo = ? and clerk = ?and seatChar = ? and flight = ?;");
+			preStt.setInt(1, seat.getSeatNo());
+			preStt.setInt(2, clerk.getPersonID());
+			preStt.setString(3, seat.getSeatChar());
+			preStt.setInt(4, flight.getFlightID());
+			rs = preStt.executeQuery();
+			if(rs.next()){
+				return new Reservation( rs.getInt(1),flight, null,  seat, clerk );
+				
+			}else
+				return null;
+
+		}catch(SQLException e){
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	public ArrayList<Reservation> getReservations(Passenger pass){
+		try{
+			checkConnection();
+			ArrayList<Reservation> reservations = new ArrayList<Reservation>();
+			Flight f;
+			Seat s;
+			Clerk c;
+			preStt = conn.prepareStatement("Select * from Reservation where passenger = ?;");
+			preStt.setInt(1, pass.getPersonID());
+			ResultSet rs = preStt.executeQuery();
+			while(rs.next()){
+				f = getFlight(rs.getInt(2));
+				c = (Clerk)getUserByID(rs.getInt(4));
+				s = new Seat(rs.getInt(5),rs.getString(6),false);
+				reservations.add(new Reservation( rs.getInt(1),f, pass,  s, c ));
+				
+			}
+			if(reservations.size()>0)
+				return reservations;
+			else
+				return null;
+
+		}catch(SQLException e){
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	public Reservation makeReservation(Reservation res, Passenger pass){
+		try{
+			checkConnection();
+			preStt = conn.prepareStatement("Update  Reservation set passenger = ? where idReservation = ?;");
+			preStt.setInt(1, pass.getPersonID());
+			preStt.setInt(2, res.getID());
+			if(preStt.executeUpdate() == 1){
+				res.passenger = pass;
+				return res;
+			}
+			return null;
+		}catch(SQLException e){
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
 	public boolean deleteReservation(int resID){
 		try{
 			checkConnection();
@@ -639,7 +883,7 @@ public class DatabaseConnector {
 			int numOfRows = rs.getInt(3);
 			String seatChars = rs.getString(4);
 			String seatArrengement = rs.getString(5);
-			System.out.println(planeType.concat(",".concat(String.valueOf(numOfRows).concat(",".concat(seatChars.concat(",".concat(seatArrengement)))))));
+			//System.out.println(planeType.concat(",".concat(String.valueOf(numOfRows).concat(",".concat(seatChars.concat(",".concat(seatArrengement)))))));
 			return planeType.concat(",".concat(String.valueOf(numOfRows).concat(",".concat(seatChars.concat(",".concat(seatArrengement))))));
 		}catch (SQLException e){
 			e.printStackTrace();
@@ -677,7 +921,7 @@ public class DatabaseConnector {
 			
 			while(rs.next()){
 				
-				seats.add(new Seat(rs.getInt(5), rs.getString(6),false));
+				seats.add(new Seat(rs.getInt(5)-1, rs.getString(6),false));
 			}
 			return seats;
 		}catch(SQLException e){
@@ -686,6 +930,44 @@ public class DatabaseConnector {
 		}
 		
 	}
+	
+	public ArrayList<Airport> getDestinationAirportsDepartsFrom(Airport airport){
+		try {
+			checkConnection();
+			ArrayList<Airport> airports = new ArrayList<Airport>();
+			preStt = conn.prepareStatement("Select distinct idAirport, AirportName, Country, City from Airport, Flight where Flight.departure = ?  and Flight.destination = Airport.idAirport;");
+			preStt.setInt(1, airport.getAirportID());
+			rs = preStt.executeQuery();
+			while(rs.next()){
+				 airports.add(new Airport(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4)));
+			}
+			return airports;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	public ArrayList<Airport> getDepartureAirportsArrivesTo(Airport airport){
+		try {
+			checkConnection();
+			ArrayList<Airport> airports = new ArrayList<Airport>();
+			preStt = conn.prepareStatement("Select distinct idAirport, AirportName, Country, City from Airport, Flight where Flight.destination = ?  and Flight.departure = Airport.idAirport;");
+			preStt.setInt(1, airport.getAirportID());
+			rs = preStt.executeQuery();
+			while(rs.next()){
+				 airports.add(new Airport(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4)));
+			}
+			return airports;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	 
+	
+	
 	
 }
 

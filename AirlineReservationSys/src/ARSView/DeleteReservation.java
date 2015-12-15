@@ -13,11 +13,10 @@ import javax.swing.JTextField;
 public class DeleteReservation extends JPanel {
 
 	AppManager manager;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
+	private JTextField socialNo;
+	private JTextField name;
+	private JTextField surname;
+	private JTextField phone;
 	public DeleteReservation() {
 		setLayout(null);
 		
@@ -28,7 +27,7 @@ public class DeleteReservation extends JPanel {
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panel_1.setBounds(10, 22, 410, 152);
+		panel_1.setBounds(14, 32, 410, 152);
 		panel.add(panel_1);
 		panel_1.setLayout(null);
 		
@@ -36,53 +35,63 @@ public class DeleteReservation extends JPanel {
 		lblNewLabel.setBounds(10, 11, 74, 14);
 		panel_1.add(lblNewLabel);
 		
-		textField = new JTextField();
-		textField.setBounds(10, 28, 86, 20);
-		panel_1.add(textField);
-		textField.setColumns(10);
+		socialNo = new JTextField();
+		socialNo.setBounds(10, 28, 86, 20);
+		panel_1.add(socialNo);
+		socialNo.setColumns(10);
+		socialNo.addActionListener(new ActionListener() {
+		      public void actionPerformed(ActionEvent e) {
+		          
+		    	  AppManager.getPassenger(socialNo.getText());
+		    	  if(AppManager.ResPassenger != null){
+			    	  name.setText(AppManager.ResPassenger.getName()  + " " + AppManager.ResPassenger.getSurname());
+			    	  surname.setText(AppManager.ResPassenger.getEmail());
+			    	  phone.setText(AppManager.ResPassenger.getPhoneNo());
+		    	  }else{
+		    		  AppManager.error(AppManager.NOPASSENGERFOUND);
+		    		  name.setText("");
+		    		  surname.setText("");
+		    		  phone.setText("");
+		    	  }
+		        }
+		      });
 		
-		JLabel lblName = new JLabel("Name*");
-		lblName.setBounds(131, 11, 74, 14);
+		JLabel lblName = new JLabel("Name:");
+		lblName.setBounds(26, 83, 74, 14);
 		panel_1.add(lblName);
 		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(131, 28, 86, 20);
-		panel_1.add(textField_1);
+		name = new JTextField();
+		name.setColumns(10);
+		name.setBounds(26, 109, 95, 20);
+		panel_1.add(name);
 		
-		JLabel lblSurname = new JLabel("Surname*");
-		lblSurname.setBounds(250, 11, 74, 14);
+		JLabel lblSurname = new JLabel("Email:");
+		lblSurname.setBounds(158, 83, 74, 14);
 		panel_1.add(lblSurname);
 		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		textField_2.setBounds(250, 28, 86, 20);
-		panel_1.add(textField_2);
+		surname = new JTextField();
+		surname.setColumns(10);
+		surname.setBounds(158, 109, 95, 20);
+		panel_1.add(surname);
 		
-		JLabel lblPhone = new JLabel("Phone Number*");
-		lblPhone.setBounds(10, 79, 86, 14);
+		JLabel lblPhone = new JLabel("Phone:");
+		lblPhone.setBounds(288, 83, 86, 14);
 		panel_1.add(lblPhone);
 		
-		textField_3 = new JTextField();
-		textField_3.setColumns(10);
-		textField_3.setBounds(10, 96, 86, 20);
-		panel_1.add(textField_3);
-		
-		JLabel lblDateOfBirth = new JLabel("Date of Birth*");
-		lblDateOfBirth.setBounds(131, 79, 86, 14);
-		panel_1.add(lblDateOfBirth);
-		
-		textField_4 = new JTextField();
-		textField_4.setColumns(10);
-		textField_4.setBounds(131, 96, 86, 20);
-		panel_1.add(textField_4);
+		phone = new JTextField();
+		phone.setColumns(10);
+		phone.setBounds(288, 109, 95, 20);
+		panel_1.add(phone);
 		
 		JButton btnGetReservations = new JButton("Get Reservations");
 		btnGetReservations.setBounds(145, 196, 152, 23);
 		btnGetReservations.addActionListener(new ActionListener() {
 			//todo
 			public void actionPerformed(ActionEvent e) {
-				manager.update(manager.PROCEEDTOGETRESERVATION);
+				if(name.getText().equals("")|| surname.getText().equals("") || phone.getText().equals("")){
+					AppManager.error(AppManager.EMPTYFIELD);
+				}else
+					AppManager.update(manager.PROCEEDTORESERVATIONLIST);
 			}
 		});
 		panel.add(btnGetReservations);
@@ -101,5 +110,7 @@ public class DeleteReservation extends JPanel {
 		lblPassenger.setBounds(22, 11, 77, 14);
 		panel.add(lblPassenger);
 	}
+	
+
 
 }
